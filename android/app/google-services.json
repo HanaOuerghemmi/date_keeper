@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "960135121208",
+    "project_id": "date-keeper-date",
+    "storage_bucket": "date-keeper-date.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960135121208:android:dedc516106c5f8dedf99cd",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxw_vHWlIPN6Vq_IBlxsTRPrz4wZ2BWMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960135121208:android:36e2b03e84cb98e5df99cd",
+        "android_client_info": {
+          "package_name": "com.example.date_keeper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxw_vHWlIPN6Vq_IBlxsTRPrz4wZ2BWMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
