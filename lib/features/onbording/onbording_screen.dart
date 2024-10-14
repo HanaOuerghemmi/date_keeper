@@ -1,5 +1,5 @@
-
 import 'package:date_keeper/core/core.dart';
+import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
 
 import 'package:date_keeper/features/onbording/widgets/onbording_buid_dot.dart';
 import 'package:date_keeper/features/onbording/widgets/onbording_build_page.dart';
@@ -35,13 +35,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ];
   }
 
-
   Future<void> _completeOnboarding() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.setBool('isShowOnboarding', true); // Set onboarding flag to true
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
@@ -82,7 +81,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 _buildPages().length,
-                (index) => onbordingBuildDot(index: index, currentPage: _currentPage),
+                (index) =>
+                    onbordingBuildDot(index: index, currentPage: _currentPage),
               ),
             ),
           ),
@@ -112,7 +112,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 child: Text(
-
                   _currentPage == _buildPages().length - 1
                       ? "Get Started"
                       : "Next",
