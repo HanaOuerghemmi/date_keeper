@@ -1,4 +1,5 @@
 import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
+import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
 import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

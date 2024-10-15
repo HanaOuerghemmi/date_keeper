@@ -16,23 +16,28 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AuthEvent {
-  UserEntity get userEntity => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(UserEntity userEntity) createAccount,
     required TResult Function(UserEntity userEntity) logIn,
+    required TResult Function() signUpAsAnymous,
+    required TResult Function() signInWithGoogle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UserEntity userEntity)? createAccount,
     TResult? Function(UserEntity userEntity)? logIn,
+    TResult? Function()? signUpAsAnymous,
+    TResult? Function()? signInWithGoogle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserEntity userEntity)? createAccount,
     TResult Function(UserEntity userEntity)? logIn,
+    TResult Function()? signUpAsAnymous,
+    TResult Function()? signInWithGoogle,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -40,26 +45,26 @@ mixin _$AuthEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_CreateAccount value) createAccount,
     required TResult Function(_LogIn value) logIn,
+    required TResult Function(_SignUpAsAnymous value) signUpAsAnymous,
+    required TResult Function(_SignInWithGoogle value) signInWithGoogle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_CreateAccount value)? createAccount,
     TResult? Function(_LogIn value)? logIn,
+    TResult? Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult? Function(_SignInWithGoogle value)? signInWithGoogle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_CreateAccount value)? createAccount,
     TResult Function(_LogIn value)? logIn,
+    TResult Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult Function(_SignInWithGoogle value)? signInWithGoogle,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  /// Create a copy of AuthEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AuthEventCopyWith<AuthEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -67,8 +72,6 @@ mixin _$AuthEvent {
 abstract class $AuthEventCopyWith<$Res> {
   factory $AuthEventCopyWith(AuthEvent value, $Res Function(AuthEvent) then) =
       _$AuthEventCopyWithImpl<$Res, AuthEvent>;
-  @useResult
-  $Res call({UserEntity userEntity});
 }
 
 /// @nodoc
@@ -83,27 +86,13 @@ class _$AuthEventCopyWithImpl<$Res, $Val extends AuthEvent>
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? userEntity = null,
-  }) {
-    return _then(_value.copyWith(
-      userEntity: null == userEntity
-          ? _value.userEntity
-          : userEntity // ignore: cast_nullable_to_non_nullable
-              as UserEntity,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$CreateAccountImplCopyWith<$Res>
-    implements $AuthEventCopyWith<$Res> {
+abstract class _$$CreateAccountImplCopyWith<$Res> {
   factory _$$CreateAccountImplCopyWith(
           _$CreateAccountImpl value, $Res Function(_$CreateAccountImpl) then) =
       __$$CreateAccountImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({UserEntity userEntity});
 }
@@ -170,6 +159,8 @@ class _$CreateAccountImpl implements _CreateAccount {
   TResult when<TResult extends Object?>({
     required TResult Function(UserEntity userEntity) createAccount,
     required TResult Function(UserEntity userEntity) logIn,
+    required TResult Function() signUpAsAnymous,
+    required TResult Function() signInWithGoogle,
   }) {
     return createAccount(userEntity);
   }
@@ -179,6 +170,8 @@ class _$CreateAccountImpl implements _CreateAccount {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UserEntity userEntity)? createAccount,
     TResult? Function(UserEntity userEntity)? logIn,
+    TResult? Function()? signUpAsAnymous,
+    TResult? Function()? signInWithGoogle,
   }) {
     return createAccount?.call(userEntity);
   }
@@ -188,6 +181,8 @@ class _$CreateAccountImpl implements _CreateAccount {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserEntity userEntity)? createAccount,
     TResult Function(UserEntity userEntity)? logIn,
+    TResult Function()? signUpAsAnymous,
+    TResult Function()? signInWithGoogle,
     required TResult orElse(),
   }) {
     if (createAccount != null) {
@@ -201,6 +196,8 @@ class _$CreateAccountImpl implements _CreateAccount {
   TResult map<TResult extends Object?>({
     required TResult Function(_CreateAccount value) createAccount,
     required TResult Function(_LogIn value) logIn,
+    required TResult Function(_SignUpAsAnymous value) signUpAsAnymous,
+    required TResult Function(_SignInWithGoogle value) signInWithGoogle,
   }) {
     return createAccount(this);
   }
@@ -210,6 +207,8 @@ class _$CreateAccountImpl implements _CreateAccount {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_CreateAccount value)? createAccount,
     TResult? Function(_LogIn value)? logIn,
+    TResult? Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult? Function(_SignInWithGoogle value)? signInWithGoogle,
   }) {
     return createAccount?.call(this);
   }
@@ -219,6 +218,8 @@ class _$CreateAccountImpl implements _CreateAccount {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_CreateAccount value)? createAccount,
     TResult Function(_LogIn value)? logIn,
+    TResult Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult Function(_SignInWithGoogle value)? signInWithGoogle,
     required TResult orElse(),
   }) {
     if (createAccount != null) {
@@ -232,23 +233,20 @@ abstract class _CreateAccount implements AuthEvent {
   const factory _CreateAccount({required final UserEntity userEntity}) =
       _$CreateAccountImpl;
 
-  @override
   UserEntity get userEntity;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CreateAccountImplCopyWith<_$CreateAccountImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LogInImplCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+abstract class _$$LogInImplCopyWith<$Res> {
   factory _$$LogInImplCopyWith(
           _$LogInImpl value, $Res Function(_$LogInImpl) then) =
       __$$LogInImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({UserEntity userEntity});
 }
@@ -315,6 +313,8 @@ class _$LogInImpl implements _LogIn {
   TResult when<TResult extends Object?>({
     required TResult Function(UserEntity userEntity) createAccount,
     required TResult Function(UserEntity userEntity) logIn,
+    required TResult Function() signUpAsAnymous,
+    required TResult Function() signInWithGoogle,
   }) {
     return logIn(userEntity);
   }
@@ -324,6 +324,8 @@ class _$LogInImpl implements _LogIn {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UserEntity userEntity)? createAccount,
     TResult? Function(UserEntity userEntity)? logIn,
+    TResult? Function()? signUpAsAnymous,
+    TResult? Function()? signInWithGoogle,
   }) {
     return logIn?.call(userEntity);
   }
@@ -333,6 +335,8 @@ class _$LogInImpl implements _LogIn {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserEntity userEntity)? createAccount,
     TResult Function(UserEntity userEntity)? logIn,
+    TResult Function()? signUpAsAnymous,
+    TResult Function()? signInWithGoogle,
     required TResult orElse(),
   }) {
     if (logIn != null) {
@@ -346,6 +350,8 @@ class _$LogInImpl implements _LogIn {
   TResult map<TResult extends Object?>({
     required TResult Function(_CreateAccount value) createAccount,
     required TResult Function(_LogIn value) logIn,
+    required TResult Function(_SignUpAsAnymous value) signUpAsAnymous,
+    required TResult Function(_SignInWithGoogle value) signInWithGoogle,
   }) {
     return logIn(this);
   }
@@ -355,6 +361,8 @@ class _$LogInImpl implements _LogIn {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_CreateAccount value)? createAccount,
     TResult? Function(_LogIn value)? logIn,
+    TResult? Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult? Function(_SignInWithGoogle value)? signInWithGoogle,
   }) {
     return logIn?.call(this);
   }
@@ -364,6 +372,8 @@ class _$LogInImpl implements _LogIn {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_CreateAccount value)? createAccount,
     TResult Function(_LogIn value)? logIn,
+    TResult Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult Function(_SignInWithGoogle value)? signInWithGoogle,
     required TResult orElse(),
   }) {
     if (logIn != null) {
@@ -376,15 +386,247 @@ class _$LogInImpl implements _LogIn {
 abstract class _LogIn implements AuthEvent {
   const factory _LogIn({required final UserEntity userEntity}) = _$LogInImpl;
 
-  @override
   UserEntity get userEntity;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LogInImplCopyWith<_$LogInImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SignUpAsAnymousImplCopyWith<$Res> {
+  factory _$$SignUpAsAnymousImplCopyWith(_$SignUpAsAnymousImpl value,
+          $Res Function(_$SignUpAsAnymousImpl) then) =
+      __$$SignUpAsAnymousImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SignUpAsAnymousImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$SignUpAsAnymousImpl>
+    implements _$$SignUpAsAnymousImplCopyWith<$Res> {
+  __$$SignUpAsAnymousImplCopyWithImpl(
+      _$SignUpAsAnymousImpl _value, $Res Function(_$SignUpAsAnymousImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$SignUpAsAnymousImpl implements _SignUpAsAnymous {
+  const _$SignUpAsAnymousImpl();
+
+  @override
+  String toString() {
+    return 'AuthEvent.signUpAsAnymous()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SignUpAsAnymousImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UserEntity userEntity) createAccount,
+    required TResult Function(UserEntity userEntity) logIn,
+    required TResult Function() signUpAsAnymous,
+    required TResult Function() signInWithGoogle,
+  }) {
+    return signUpAsAnymous();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UserEntity userEntity)? createAccount,
+    TResult? Function(UserEntity userEntity)? logIn,
+    TResult? Function()? signUpAsAnymous,
+    TResult? Function()? signInWithGoogle,
+  }) {
+    return signUpAsAnymous?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UserEntity userEntity)? createAccount,
+    TResult Function(UserEntity userEntity)? logIn,
+    TResult Function()? signUpAsAnymous,
+    TResult Function()? signInWithGoogle,
+    required TResult orElse(),
+  }) {
+    if (signUpAsAnymous != null) {
+      return signUpAsAnymous();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_LogIn value) logIn,
+    required TResult Function(_SignUpAsAnymous value) signUpAsAnymous,
+    required TResult Function(_SignInWithGoogle value) signInWithGoogle,
+  }) {
+    return signUpAsAnymous(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CreateAccount value)? createAccount,
+    TResult? Function(_LogIn value)? logIn,
+    TResult? Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult? Function(_SignInWithGoogle value)? signInWithGoogle,
+  }) {
+    return signUpAsAnymous?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_LogIn value)? logIn,
+    TResult Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult Function(_SignInWithGoogle value)? signInWithGoogle,
+    required TResult orElse(),
+  }) {
+    if (signUpAsAnymous != null) {
+      return signUpAsAnymous(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SignUpAsAnymous implements AuthEvent {
+  const factory _SignUpAsAnymous() = _$SignUpAsAnymousImpl;
+}
+
+/// @nodoc
+abstract class _$$SignInWithGoogleImplCopyWith<$Res> {
+  factory _$$SignInWithGoogleImplCopyWith(_$SignInWithGoogleImpl value,
+          $Res Function(_$SignInWithGoogleImpl) then) =
+      __$$SignInWithGoogleImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SignInWithGoogleImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$SignInWithGoogleImpl>
+    implements _$$SignInWithGoogleImplCopyWith<$Res> {
+  __$$SignInWithGoogleImplCopyWithImpl(_$SignInWithGoogleImpl _value,
+      $Res Function(_$SignInWithGoogleImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$SignInWithGoogleImpl implements _SignInWithGoogle {
+  const _$SignInWithGoogleImpl();
+
+  @override
+  String toString() {
+    return 'AuthEvent.signInWithGoogle()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$SignInWithGoogleImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UserEntity userEntity) createAccount,
+    required TResult Function(UserEntity userEntity) logIn,
+    required TResult Function() signUpAsAnymous,
+    required TResult Function() signInWithGoogle,
+  }) {
+    return signInWithGoogle();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UserEntity userEntity)? createAccount,
+    TResult? Function(UserEntity userEntity)? logIn,
+    TResult? Function()? signUpAsAnymous,
+    TResult? Function()? signInWithGoogle,
+  }) {
+    return signInWithGoogle?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UserEntity userEntity)? createAccount,
+    TResult Function(UserEntity userEntity)? logIn,
+    TResult Function()? signUpAsAnymous,
+    TResult Function()? signInWithGoogle,
+    required TResult orElse(),
+  }) {
+    if (signInWithGoogle != null) {
+      return signInWithGoogle();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CreateAccount value) createAccount,
+    required TResult Function(_LogIn value) logIn,
+    required TResult Function(_SignUpAsAnymous value) signUpAsAnymous,
+    required TResult Function(_SignInWithGoogle value) signInWithGoogle,
+  }) {
+    return signInWithGoogle(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CreateAccount value)? createAccount,
+    TResult? Function(_LogIn value)? logIn,
+    TResult? Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult? Function(_SignInWithGoogle value)? signInWithGoogle,
+  }) {
+    return signInWithGoogle?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CreateAccount value)? createAccount,
+    TResult Function(_LogIn value)? logIn,
+    TResult Function(_SignUpAsAnymous value)? signUpAsAnymous,
+    TResult Function(_SignInWithGoogle value)? signInWithGoogle,
+    required TResult orElse(),
+  }) {
+    if (signInWithGoogle != null) {
+      return signInWithGoogle(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SignInWithGoogle implements AuthEvent {
+  const factory _SignInWithGoogle() = _$SignInWithGoogleImpl;
 }
 
 /// @nodoc

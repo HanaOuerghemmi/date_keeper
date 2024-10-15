@@ -1,4 +1,7 @@
+import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -7,6 +10,20 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('home'),
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+            child: Text("log out"),
+          ),
+        ],
       ),
     );
   }

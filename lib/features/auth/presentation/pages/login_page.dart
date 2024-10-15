@@ -1,148 +1,106 @@
-import 'package:date_keeper/core/utils/help_padding.dart';
-import 'package:date_keeper/core/utils/help_textstyle.dart';
-import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
+import 'dart:developer';
 
+import 'package:date_keeper/core/constants/assets_constant.dart';
+import 'package:date_keeper/core/utils/colors.dart';
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:date_keeper/features/auth/presentation/widgets/custom_validat_textfielld.dart';
+import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
+import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          state.maybeWhen(
-              initial: () {},
-              loading: () {},
-              loaded: (_) {
-                Navigator.of(context).pushReplacementNamed('/home');
-              },
-              error: (message) {},
-              orElse: () {});
-        },
-        builder: (context, state) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Welcome back 👋",
-                      style: textStyleSubtitle,
-                    ),
-                    smallPaddingVert,
-                    Text(
-                      "Please enter your email & password to sign in.",
-                      // style: textStyleText,
-                    ),
-                    smallPaddingVert,
-                    //* using a textfiel with validate function shoing snackbar
-                    CustomValidateTextField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailController,
-                      nameTextField: "Email",
-                      prefixIcon: const Icon(
-                        Icons.email,
-                        color: Colors.black,
-                      ),
-                    ),
-
-                    // TextFieldAuth(
-                    //   controller: _emailController,
-                    //   nameTextField: "Email",
-                    //   prefixIcon: const Icon(
-                    //     Icons.email,
-                    //     color: blackColor,
-                    //   ),
-                    // ),
-
-                    CustomValidateTextField(
-                      isPassword: true,
-                      nameTextField: "Password",
-                      controller: _passwordController,
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        // color: blackColor,
-                      ),
-                    ),
-                    // TextFieldAuth(
-                    //   nameTextField: "Password",
-                    //   controller: _passwordController,
-                    //   obscureText: showPassword,
-                    //   prefixIcon: const Icon(
-                    //     Icons.lock,
-                    //     color: blackColor,
-                    //   ),
-                    //   suffixIcon: IconButton(
-                    //     icon: showPassword
-                    //         ? const Icon(Icons.visibility)
-                    //         : const Icon(Icons.visibility_off),
-                    //     onPressed: () {
-                    //       setState(() {
-                    //         showPassword = !showPassword;
-                    //       });
-                    //     },
-                    //     color: blackColor,
-                    //   ),
-                    // ),
-                    // ! Custom this in widget to Log In
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton(
-                          onPressed: () {
-                            // Navigator.pushNamed(context, resetPassword.routeName);
-                          },
-                          child: Text(
-                            "Forget Password?",
-                            // style:
-                            //     textStyleTextBold.copyWith(color: primaryColor),
-                          )),
-                    ),
-                    smallPaddingVert,
-                    const Divider(
-                      height: 1,
-                    ),
-                    mediumPaddingVert,
-                    // const GoToSignUp(),
-                    largePaddingVert,
-                    mediumPaddingVert,
-                    ElevatedButton(
-                        onPressed: () => _submit(context), child: Text("data"))
-                  ],
+        backgroundColor: primaryColor,
+        body: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            state.maybeWhen(
+                initial: () {},
+                loading: () {},
+                loaded: (_) {
+                  log("state loded");
+                  // Navigator.of(context).pushReplacementNamed('/home');
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    (Route<dynamic> route) =>
+                        false, // This condition will remove all previous routes
+                  );
+                },
+                error: (message) {},
+                orElse: () {});
+          },
+          builder: (context, state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Image.asset(SPLASH_LOGO),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+                CustomButtonAuth(
+                  textButton: "with Email",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginWithEmailPage()),
+                    );
+                  },
+                ),
+                CustomButtonAuth(
+                  textButton: "with google",
+                  onPressed: () => _signInWithGoogle(context),
+                ),
+                CustomButtonAuth(
+                  textButton: "with Appele",
+                  onPressed: () {},
+                ),
+                CustomButtonAuth(
+                  textButton: "Anonymous",
+                  onPressed: () => _signUpAsAnymous(context),
+                ),
+              ],
+            );
+          },
+        ));
+  }
+
+  void _signUpAsAnymous(BuildContext context) {
+    // Handle submission logic here
+    BlocProvider.of<AuthBloc>(context).add(
+      const AuthEvent.signUpAsAnymous(),
     );
   }
 
-  void _submit(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      // Handle submission logic here
+  void _signInWithGoogle(BuildContext context) {
+    // Handle submission logic here
+    BlocProvider.of<AuthBloc>(context).add(
+      const AuthEvent.signInWithGoogle(),
+    );
+  }
+}
 
-      BlocProvider.of<AuthBloc>(context).add(AuthEvent.createAccount(
-          userEntity: UserEntity(
-        email: _emailController.text.trim(),
-      )));
-    }
+class CustomButtonAuth extends StatelessWidget {
+  final String textButton;
+  final void Function()? onPressed;
+  const CustomButtonAuth({
+    super.key,
+    required this.textButton,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: onPressed,
+        child: Container(
+          child: Center(
+            child: Text(textButton),
+          ),
+        ));
   }
 }
