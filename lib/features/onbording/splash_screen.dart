@@ -1,5 +1,6 @@
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
+import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
 import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:date_keeper/features/onbording/onbording_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     checkAppFlow(
       context: context,
-      homeScreen: const LoginPage(),
+      homeScreen: const HomeScreen(),
       onboardingScreen: const OnboardingScreen(),
       loginScreen: const LoginPage(),
     );

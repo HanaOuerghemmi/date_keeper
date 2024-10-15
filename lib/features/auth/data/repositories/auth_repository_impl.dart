@@ -26,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
     if (await networkInfo.isConnected) {
       try {
         log("in function LogIn  .....");
-        final authEntity = await remoteDataSource.logIn(userModel);
+        final authEntity = await remoteDataSource.logInWithEmail(userModel);
         return right(authEntity);
       } on ServerException {
         return left(ServerFailure());
@@ -54,8 +54,44 @@ class AuthRepositoryImpl implements AuthRepository {
     if (await networkInfo.isConnected) {
       try {
         log("in function .....");
-        final authEntity = await remoteDataSource.signIn(userModel);
+        final authEntity = await remoteDataSource.signInWithEmail(userModel);
         return right(authEntity);
+      } on ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> signInAsAnonymous() async {
+    if (await networkInfo.isConnected) {
+      try {
+        log("in function .....");
+        final authEntity = await remoteDataSource.signInAsAnonymous();
+        return right(authEntity);
+      } on ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> signInWithApple() {
+    // TODO: implement signInWithApple
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> signInWithGoogle() async {
+    if (await networkInfo.isConnected) {
+      try {
+        log("in function .....");
+        final authEntity = await remoteDataSource.signInWithGoogle();
+        return right(authEntity!);
       } on ServerException {
         return left(ServerFailure());
       }
