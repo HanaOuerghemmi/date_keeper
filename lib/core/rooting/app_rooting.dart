@@ -62,7 +62,7 @@ class AppRouter {
   }
 }
 ///************ function we will using for navigation if need to forget history root make it true else false 
-///*************        how using    navigateGoOption(context: context, routeName: '/loading');
+///*************        how using  navigateGoOption(context: context, routeName: '/loading',forgetHistory: true );
  
 /// */
 void navigateGoOption({
