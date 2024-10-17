@@ -1,3 +1,4 @@
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,10 +19,12 @@ class HomeScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
+        navigateGoOption(context: context, routeName: '/login', forgetHistory: true);
+
+              // Navigator.push(
+//context,
+               // MaterialPageRoute(builder: (context) => LoginPage()),
+            //  );
             },
             child: Text("log out"),
           ),

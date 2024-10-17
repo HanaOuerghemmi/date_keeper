@@ -1,4 +1,4 @@
-import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:flutter/material.dart';
 
 class WidgetCharacter extends StatelessWidget {
@@ -11,10 +11,11 @@ class WidgetCharacter extends StatelessWidget {
         Text('Character'),
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreateCharacterPage()),
-            );
+            navigateGoOption(context: context, routeName: '/createCaracter');
+          //  Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => CreateCharacterPage()),
+          //   ); 
           },
           child: CircleAvatar(
             child: Icon(Icons.add),

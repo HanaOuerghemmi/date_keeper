@@ -2,6 +2,7 @@ import 'package:date_keeper/core/widget/loading.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/sign_up_with_email_page.dart';
+import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
 import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:date_keeper/features/onbording/onbording_screen.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';
@@ -51,12 +52,18 @@ class AppRouter {
           name: 'home',
           builder: (context, state) => HomeScreen(),
         ),
+        GoRoute(
+          path: '/createCaracter',
+          name: 'createCaracter',
+          builder: (context, state) => CreateCharacterPage(),
+        ),
       ],
     );
   }
 }
 ///************ function we will using for navigation if need to forget history root make it true else false 
-///
+///*************        how using    navigateGoOption(context: context, routeName: '/loading');
+ 
 /// */
 void navigateGoOption({
   required BuildContext context,
