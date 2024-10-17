@@ -44,9 +44,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final UserCredential userCredential =
         await auth.createUserWithEmailAndPassword(
             email: userModel.email!, password: "12345678");
-    final UserModel user = UserModel.fromFirebase(userCredential.user!);
+    UserModel user = UserModel.fromFirebase(userCredential.user!);
 
-    await firebaseFirestore.collection(collectionUsersName).add(user.toJson());
+    await firebaseFirestore
+        .collection(collectionUsersName)
+        .doc(user.uid)
+        .set(user.toJson());
 
     log(userCredential.toString());
 
