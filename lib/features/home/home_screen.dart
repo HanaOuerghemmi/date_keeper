@@ -1,4 +1,5 @@
 import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
+import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          const WidgetCharacter(),
           ElevatedButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();

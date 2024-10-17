@@ -11,8 +11,7 @@ class CreateCaracterUsercase {
     required this.characterRepository,
   });
 
-  Future<Either<Failure, CharacterEntity>> call(
-      CharacterEntity characterEntity) async {
+  Future<Either<Failure, Unit>> call(CharacterEntity characterEntity) async {
     return await characterRepository.createCharacter(characterEntity);
   }
 }

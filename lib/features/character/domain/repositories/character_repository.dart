@@ -3,7 +3,7 @@ import 'package:date_keeper/core/error/failures.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 
 abstract class CharacterRepository {
-  Future<Either<Failure, CharacterEntity>> createCharacter(
+  Future<Either<Failure, Unit>> createCharacter(
       CharacterEntity characterEntity);
   Future<Either<Failure, CharacterEntity>> updateCharacter(
       CharacterEntity characterEntity);
