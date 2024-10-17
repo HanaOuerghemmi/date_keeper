@@ -1,12 +1,13 @@
 import 'dart:developer';
-
 import 'package:date_keeper/core/constants/assets_constant.dart';
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/core/utils/colors.dart';
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
 import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -14,21 +15,28 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: primaryColor,
+        backgroundColor: whiteColor,
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             state.maybeWhen(
                 initial: () {},
-                loading: () {},
+                loading: () {
+                                  navigateGoOption(context: context, routeName: '/loading');
+
+                  //context.go( '/loading');
+                },
                 loaded: (_) {
                   log("state loded");
+                                  navigateGoOption(context: context, routeName: '/home',  forgetHistory: true);
+
                   // Navigator.of(context).pushReplacementNamed('/home');
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    (Route<dynamic> route) =>
-                        false, // This condition will remove all previous routes
-                  );
+                  //context.go('/home');
+                  //  Navigator.pushAndRemoveUntil(
+                  //  context,
+                  //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  //   (Route<dynamic> route) =>
+                  //       false, // This condition will remove all previous routes
+                  // );
                 },
                 error: (message) {},
                 orElse: () {});
@@ -39,16 +47,14 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
-                  child: Image.asset(SPLASH_LOGO),
+                  child: Image.asset(LOGO_APP),
                 ),
                 CustomButtonAuth(
                   textButton: "with Email",
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginWithEmailPage()),
-                    );
+                  //  context.go('/loginWithEmail');
+                navigateGoOption(context: context, routeName: '/loginWithEmail');
+
                   },
                 ),
                 CustomButtonAuth(
@@ -73,6 +79,7 @@ class LoginPage extends StatelessWidget {
     // Handle submission logic here
     BlocProvider.of<AuthBloc>(context).add(
       const AuthEvent.signUpAsAnymous(),
+
     );
   }
 

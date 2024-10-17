@@ -1,12 +1,9 @@
 import 'package:date_keeper/core/core.dart';
-import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
-import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
-
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/onbording/widgets/onbording_buid_dot.dart';
 import 'package:date_keeper/features/onbording/widgets/onbording_build_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../home/home_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -39,10 +36,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _completeOnboarding() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.setBool('isShowOnboarding', true); // Set onboarding flag to true
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+    navigateGoOption(context: context, routeName: '/login', forgetHistory: true);
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const LoginPage()),
+    // );
   }
 
   @override

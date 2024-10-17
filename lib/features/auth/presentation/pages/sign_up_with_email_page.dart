@@ -1,12 +1,10 @@
 import 'dart:developer';
-
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/core/utils/help_padding.dart';
 import 'package:date_keeper/core/utils/help_textstyle.dart';
 import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
-
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:date_keeper/features/auth/presentation/widgets/custom_validat_textfielld.dart';
-import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,16 +28,22 @@ class _SignUpWithEmailPageState extends State<SignUpWithEmailPage> {
         listener: (context, state) {
           state.maybeWhen(
               initial: () {},
-              loading: () {},
+              loading: () {
+
+                navigateGoOption(context: context, routeName: '/loading');
+              },
               loaded: (_) {
                 log("state loded");
                 // Navigator.of(context).pushReplacementNamed('/home');
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  (Route<dynamic> route) =>
-                      false, // This condition will remove all previous routes
-                );
+               // context.go('/home');
+               navigateGoOption(context: context, routeName: '/home', forgetHistory: true);
+
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                //   (Route<dynamic> route) =>
+                //       false, // This condition will remove all previous routes
+                // );
               },
               error: (message) {},
               orElse: () {});
@@ -59,7 +63,7 @@ class _SignUpWithEmailPageState extends State<SignUpWithEmailPage> {
                     ),
                     smallPaddingVert,
                     Text(
-                      "Please enter your email & password to sign in.",
+                      "Please enter your email & password to sign up.",
                       // style: textStyleText,
                     ),
                     smallPaddingVert,
@@ -135,7 +139,7 @@ class _SignUpWithEmailPageState extends State<SignUpWithEmailPage> {
                     mediumPaddingVert,
                     ElevatedButton(
                       onPressed: () => _submit(context),
-                      child: Text("data"),
+                      child: Text("signup"),
                     ),
                     // Row(
                     //   children: [
