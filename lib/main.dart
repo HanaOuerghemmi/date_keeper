@@ -1,3 +1,4 @@
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';
 import 'package:date_keeper/firebase_options.dart';
@@ -21,20 +22,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+      final AppRouter _appRouter = AppRouter(); // Create instance of AppRouter
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.sl<AuthBloc>()),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'date keeper',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: SplashScreen(),
+        routerConfig: _appRouter.router,
         // home: SignUpPage(),
       ),
+      
     );
   }
 }

@@ -1,13 +1,12 @@
 import 'dart:developer';
 
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/core/utils/help_padding.dart';
 import 'package:date_keeper/core/utils/help_textstyle.dart';
 import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
 
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:date_keeper/features/auth/presentation/pages/sign_up_with_email_page.dart';
 import 'package:date_keeper/features/auth/presentation/widgets/custom_validat_textfielld.dart';
-import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,16 +30,24 @@ class _LoginWithEmailPageState extends State<LoginWithEmailPage> {
         listener: (context, state) {
           state.maybeWhen(
               initial: () {},
-              loading: () {},
+              loading: () {
+                navigateGoOption(context: context, routeName: '/loading');
+
+//context.go('/loading') ;
+              },
               loaded: (_) {
                 log("state loded");
+                                navigateGoOption(context: context, routeName: '/home');
+
                 // Navigator.of(context).pushReplacementNamed('/home');
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  (Route<dynamic> route) =>
-                      false, // This condition will remove all previous routes
-                );
+                //
+                //                context.go('/home') ;
+                           //  Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                //   (Route<dynamic> route) =>
+                //       false, // This condition will remove all previous routes
+                // );
               },
               error: (message) {},
               orElse: () {});
@@ -136,19 +143,21 @@ class _LoginWithEmailPageState extends State<LoginWithEmailPage> {
                     mediumPaddingVert,
                     ElevatedButton(
                       onPressed: () => _submit(context),
-                      child: Text("data"),
+                      child: Text("login"),
                     ),
                     Row(
                       children: [
                         Text("don't have accounnt"),
                         TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        SignUpWithEmailPage()),
-                              );
+                               navigateGoOption(context: context, routeName: '/signUpWithEmail');
+
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) =>
+                              //           SignUpWithEmailPage()),
+                              // );
                             },
                             child: Text("Sign up"))
                       ],

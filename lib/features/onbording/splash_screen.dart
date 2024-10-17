@@ -16,9 +16,9 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     checkAppFlow(
       context: context,
-      homeScreen: const HomeScreen(),
-      onboardingScreen: const OnboardingScreen(),
-      loginScreen: const LoginPage(),
+      homeScreen: '/home',
+      onboardingScreen: '/onboarding',
+      loginScreen:'/login',
     );
   }
 
