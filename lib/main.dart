@@ -1,5 +1,6 @@
 import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';
 import 'package:date_keeper/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.sl<AuthBloc>()),
+        BlocProvider(create: (_) => di.sl<CharacterBloc>()),
       ],
       child: MaterialApp.router(
         title: 'date keeper',
