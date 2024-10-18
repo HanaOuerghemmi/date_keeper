@@ -51,6 +51,7 @@ dependencies:
   go_router: ^14.3.0
   firebase_storage: ^12.3.3
   image_picker: ^1.1.2
+  flutter_svg: ^2.0.10+1
 
 
 dev_dependencies:

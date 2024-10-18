@@ -1,7 +1,6 @@
-import 'package:date_keeper/core/rooting/app_rooting.dart';
-import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
+import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:date_keeper/features/home/widgets/home_appbar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,26 +9,22 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('home'),
-      ),
+      appBar: HomeAppBar(userName: 'userName'),
       body: Column(
         children: [
           const WidgetCharacter(),
-          ElevatedButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-        navigateGoOption(context: context, routeName: '/login', forgetHistory: true);
-
-              // Navigator.push(
-//context,
-               // MaterialPageRoute(builder: (context) => LoginPage()),
-            //  );
-            },
-            child: Text("log out"),
-          ),
+       
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(50), // Adjust the circular radius
+  ),
+        elevation: 1,
+        onPressed: (){},
+        backgroundColor: primaryColor,
+        child: Icon(Icons.calendar_month_sharp, color: whiteColor,),
+        ),
     );
   }
 }
