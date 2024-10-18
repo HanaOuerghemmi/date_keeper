@@ -2,7 +2,9 @@ import 'package:date_keeper/core/widget/loading.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/sign_up_with_email_page.dart';
+import 'package:date_keeper/features/character/presentation/pages/character_screen.dart';
 import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
+import 'package:date_keeper/features/event/presentation/add_event_screen.dart';
 import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:date_keeper/features/onbording/onbording_screen.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';
@@ -58,15 +60,37 @@ class AppRouter {
           name: 'createCaracter',
           builder: (context, state) => CreateCharacterPage(),
         ),
-          GoRoute(
+         GoRoute(
+          path: '/charcter',
+          name: 'charcter',
+
+          
+          builder: (context, state) {
+    // Extract parameters using state.extra
+    final params = state.extra as Map<String, dynamic>;
+    final name = params['name'] as String;
+    final image = params['image'] as String;
+
+    return  CharacterScreen(
+name: name,
+image: image,
+          );}
+        ),
+        GoRoute(
           path: '/profile',
           name: 'profile',
           builder: (context, state) => ProfileScreen(),
+        ),
+        GoRoute(
+          path: '/addEvent',
+          name: 'addEvent',
+          builder: (context, state) => AddEventScreen(),
         ),
       ],
     );
   }
 }
+
 ///************ function we will using for navigation if need to forget history root make it true else false 
 ///*************        how using  navigateGoOption(context: context, routeName: '/loading',forgetHistory: true );
  
