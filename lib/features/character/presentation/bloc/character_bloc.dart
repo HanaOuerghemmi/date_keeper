@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -15,9 +17,10 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     required this.createCaracterUsercase,
   }) : super(_Initial()) {
     on<CharacterEvent>((event, emit) async {
-      event.when(createCharacter: (characterEntity) async {
+      await event.when(createCharacter: (characterEntity, fileImage) async {
         emit(const CharacterState.loading());
-        final failureOrCreate = await createCaracterUsercase(characterEntity);
+        final failureOrCreate =
+            await createCaracterUsercase(characterEntity, fileImage);
         failureOrCreate.fold((failure) async {
           emit(const CharacterState.error(
               message: "error")); //_mapFailureToMessage(failure)
