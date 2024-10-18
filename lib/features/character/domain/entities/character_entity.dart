@@ -14,3 +14,19 @@ class CharacterEntity {
     this.additionalInfo,
   });
 }
+
+extension CharacterCopyWith on CharacterEntity {
+  CharacterEntity copyWith({
+    String? id,
+    String? name,
+    String? additionalInfo,
+    String? profilePicture,
+  }) {
+    return CharacterEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      additionalInfo: additionalInfo ?? this.additionalInfo,
+      profilePicture: profilePicture ?? this.profilePicture,
+    );
+  }
+}

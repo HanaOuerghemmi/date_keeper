@@ -35,8 +35,9 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
   ) {
     if (_formKey.currentState!.validate()) {
       context.read<CharacterBloc>().add(CharacterEvent.createCharacter(
-          characterEntity:
-              CharacterEntity(name: name, relationship: relationship)));
+          fileImage: _image!,
+          characterEntity: CharacterEntity(
+              name: name, relationship: relationship, profilePicture: '')));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Character created successfully!')),
       );

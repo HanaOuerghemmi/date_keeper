@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 
 import 'package:date_keeper/core/core.dart';
@@ -22,6 +24,8 @@ class CharacterRepositoryImpl implements CharacterRepository {
     CharacterModel characterModel = CharacterModel(
       name: characterEntity.name,
       relationship: characterEntity.relationship,
+      profilePicture: characterEntity.profilePicture,
+      additionalInfo: characterEntity.additionalInfo,
     );
     if (await networkInfo.isConnected) {
       try {
@@ -53,5 +57,20 @@ class CharacterRepositoryImpl implements CharacterRepository {
       CharacterEntity characterEntity) {
     // TODO: implement updateCharacter
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadCharacterImage(File imageFile) async {
+    if (await networkInfo.isConnected) {
+      try {
+        String urlImage =
+            await remoteDataSource.uploadCharacterImage(imageFile);
+        return right(urlImage);
+      } on ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
 }

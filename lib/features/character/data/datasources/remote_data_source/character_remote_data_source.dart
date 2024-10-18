@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:date_keeper/features/character/data/models/character_model.dart';
 
 abstract class CharacterRemoteDataSource {
@@ -5,4 +7,5 @@ abstract class CharacterRemoteDataSource {
   Future<CharacterModel> updateCharacter(CharacterModel characterModel);
   Future<void> deleteCharacter();
   Future<List<CharacterModel>> getAllCharactersOfUser(String idUser);
+  Future<String> uploadCharacterImage(File imageFile);
 }
