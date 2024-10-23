@@ -1,5 +1,6 @@
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/core/rooting/app_rooting.dart';
+import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
 import 'package:flutter/material.dart';
 
 class WidgetCharacter extends StatelessWidget {
@@ -30,12 +31,19 @@ class WidgetCharacter extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                //*****  add new charcter *************/
                 CharcterItemWidget(
-                  onTap: () => navigateGoOption(
-                      context: context, routeName: '/createCaracter'),
+                  onTap: () =>
+                  showCreateCharacterDialog(context),
+                  /// navigateGoOption(
+                    ///  context: context, routeName: '/createCaracter'),
                   image: Icon(Icons.add, size: 30),
                   text: 'New',
                 ),
+                
+                
+                //*****  list all charcter *************/
+
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,

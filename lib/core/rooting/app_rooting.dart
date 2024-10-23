@@ -81,11 +81,11 @@ image: image,
           name: 'profile',
           builder: (context, state) => ProfileScreen(),
         ),
-        GoRoute(
-          path: '/addEvent',
-          name: 'addEvent',
-          builder: (context, state) => AddEventScreen(),
-        ),
+        // GoRoute(
+        //   path: '/addEvent',
+        //   name: 'addEvent',
+        //   builder: (context, state) => AddEventScreen(),
+        // ),
       ],
     );
   }
