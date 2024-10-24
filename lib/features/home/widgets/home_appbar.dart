@@ -1,40 +1,64 @@
+import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/core/utils/help_padding.dart';
 import 'package:flutter/material.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String userName;
+  final String? profileImageUrl; 
+  HomeAppBar({required this.userName, this.profileImageUrl});
 
-  HomeAppBar({required this.userName});
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good Morning,';
+    } else if (hour < 17) {
+      return 'Good Afternoon,';
+    } else {
+      return 'Good Evening,';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-       automaticallyImplyLeading: false, 
-elevation: 1,
+      automaticallyImplyLeading: false,
+      elevation: 1,
       title: Row(
         children: [
-        const  CircleAvatar(
-  backgroundImage: NetworkImage('https://img.freepik.com/vecteurs-libre/cercle-bleu-utilisateur-blanc_78370-4707.jpg?t=st=1729240089~exp=1729243689~hmac=f100922a642e7a3b23b8e6f23071503f5a135041e6d105e6fdb87ae02f65b3c2&w=740'),
-            radius: 24,
-          ),
-smallPaddingHor,          // Greeting Text
+          // If profileImageUrl is null or empty, show default Icon
+          profileImageUrl != null && profileImageUrl!.isNotEmpty
+              ? CircleAvatar(
+                  radius: 24,
+                  backgroundImage: NetworkImage(profileImageUrl!),
+                  onBackgroundImageError: (_, __) => const Icon(Icons.person, size: 48),
+                )
+              : const CircleAvatar(
+                  radius: 24,
+                  child: Icon(Icons.person, size: 40, color: primaryColor,),
+                ),
+          smallPaddingHor,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hello,"),
-              Text(userName),
-
+              Text(_getGreeting(), style: Theme.of(context).textTheme.bodyLarge),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                child: Text(
+                  userName,
+                  key: ValueKey(userName), 
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
             ],
           ),
         ],
       ),
       actions: [
-        // Settings/ Menu Icon Button
         IconButton(
-          icon: Icon(Icons.settings), // You can change this to Icons.menu if you prefer a menu icon
+          icon: Icon(Icons.settings),
           onPressed: () {
-            navigateGoOption(context: context, routeName: '/profile' );
+            navigateGoOption(context: context, routeName: '/profile');
             print("Settings/Menu pressed");
           },
         ),
@@ -42,7 +66,6 @@ smallPaddingHor,          // Greeting Text
     );
   }
 
-  // Required to define the size of the AppBar
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
