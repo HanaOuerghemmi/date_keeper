@@ -6,6 +6,10 @@ abstract class AuthRepository {
   Future<Either<Failure, UserEntity>> logIn(UserEntity userEntity);
   Future<Either<Failure, UserEntity>> signIn(UserEntity userEntity);
   Future<Either<Failure, Unit>> logOut();
+
+  Future<Either<Failure, bool>> isSignIn();
+
+  Future<Either<Failure, String>> getCurrentUID();
   Future<Either<Failure, UserEntity>> signInWithGoogle();
   Future<Either<Failure, UserEntity>> signInWithApple();
   Future<Either<Failure, UserEntity>> signInAsAnonymous();

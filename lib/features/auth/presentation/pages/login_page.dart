@@ -21,13 +21,20 @@ class LoginPage extends StatelessWidget {
             state.maybeWhen(
                 initial: () {},
                 loading: () {
-                                  navigateGoOption(context: context, routeName: '/loading');
+                  navigateGoOption(context: context, routeName: '/loading');
 
                   //context.go( '/loading');
                 },
-                loaded: (_) {
+                loaded: (user) {
                   log("state loded");
-                                  navigateGoOption(context: context, routeName: '/home',  forgetHistory: true);
+                  navigateGoOption(
+                    context: context,
+                    routeName: '/home',
+                    forgetHistory: true,
+                    params: {
+                      'uid': user.uid!,
+                    },
+                  );
 
                   // Navigator.of(context).pushReplacementNamed('/home');
                   //context.go('/home');
@@ -52,9 +59,9 @@ class LoginPage extends StatelessWidget {
                 CustomButtonAuth(
                   textButton: "with Email",
                   onPressed: () {
-                  //  context.go('/loginWithEmail');
-                navigateGoOption(context: context, routeName: '/loginWithEmail');
-
+                    //  context.go('/loginWithEmail');
+                    navigateGoOption(
+                        context: context, routeName: '/loginWithEmail');
                   },
                 ),
                 CustomButtonAuth(
@@ -79,7 +86,6 @@ class LoginPage extends StatelessWidget {
     // Handle submission logic here
     BlocProvider.of<AuthBloc>(context).add(
       const AuthEvent.signUpAsAnymous(),
-
     );
   }
 

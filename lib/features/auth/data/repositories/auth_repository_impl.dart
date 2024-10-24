@@ -37,9 +37,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> logOut() {
-    // TODO: implement logOut
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> logOut() async {
+    if (await networkInfo.isConnected) {
+      try {
+        log("in function LogIn  .....");
+        final logout = await remoteDataSource.logOut();
+        return right(logout);
+      } on ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
 
   @override
@@ -92,6 +101,36 @@ class AuthRepositoryImpl implements AuthRepository {
         log("in function .....");
         final authEntity = await remoteDataSource.signInWithGoogle();
         return right(authEntity!);
+      } on ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getCurrentUID() async {
+    if (await networkInfo.isConnected) {
+      try {
+        log("in function .....");
+        final currentUid = await remoteDataSource.getCurrentUID();
+        return right(currentUid);
+      } on ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> isSignIn() async {
+    if (await networkInfo.isConnected) {
+      try {
+        log("in function .....");
+        final isSignIn = await remoteDataSource.isSignIn();
+        return right(isSignIn);
       } on ServerException {
         return left(ServerFailure());
       }

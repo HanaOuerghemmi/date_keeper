@@ -1,7 +1,6 @@
 import 'package:date_keeper/core/utils/help-methods.dart';
+import 'package:date_keeper/core/utils/help_padding.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/utils/utils.dart';
 
 class CustomValidateTextField extends StatefulWidget {
   final String nameTextField;

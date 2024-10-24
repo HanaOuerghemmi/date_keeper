@@ -1,6 +1,8 @@
 import 'package:date_keeper/core/widget/loading.dart';
+import 'package:date_keeper/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
+import 'package:date_keeper/features/auth/presentation/pages/main_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/sign_up_with_email_page.dart';
 import 'package:date_keeper/features/character/presentation/pages/character_screen.dart';
 import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
@@ -10,6 +12,7 @@ import 'package:date_keeper/features/onbording/onbording_screen.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';
 import 'package:date_keeper/features/profile/pages/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -17,8 +20,23 @@ class AppRouter {
 
   AppRouter() {
     router = GoRouter(
-      initialLocation: '/splash',
+      initialLocation: '/main',
       routes: [
+        GoRoute(
+          path: '/main',
+          name: 'main',
+          builder: (context, state) => const MainPage(),
+          //  {
+          //   return BlocBuilder<AuthCubit, AuthState>(
+          //     builder: (context, authState) {
+          //       if (authState is Authenticated) {
+          //         return HomeScreen(uid: authState.uid);
+          //       }
+          //       return SplashScreen();
+          //     },
+          //   );
+          // },
+        ),
         GoRoute(
           path: '/splash',
           name: 'splash',
@@ -31,8 +49,8 @@ class AppRouter {
         GoRoute(
           path: '/loading',
           name: 'loading',
-          builder:  (context, state) => LoadingScreen(),
-          ),
+          builder: (context, state) => LoadingScreen(),
+        ),
         GoRoute(
           path: '/login',
           name: 'login',
@@ -45,37 +63,37 @@ class AppRouter {
         ),
         GoRoute(
           path: '/signUpWithEmail',
-         name: 'signUpWithEmail',
-
+          name: 'signUpWithEmail',
           builder: (context, state) => SignUpWithEmailPage(),
         ),
-        
         GoRoute(
           path: '/home',
           name: 'home',
-          builder: (context, state) => HomeScreen(),
+          builder: (context, state) {
+            final params = state.extra as Map<String, dynamic>;
+            final uid = params['uid'] as String;
+            return HomeScreen(uid: uid);
+          },
         ),
         GoRoute(
           path: '/createCaracter',
           name: 'createCaracter',
           builder: (context, state) => CreateCharacterPage(),
         ),
-         GoRoute(
-          path: '/charcter',
-          name: 'charcter',
+        GoRoute(
+            path: '/charcter',
+            name: 'charcter',
+            builder: (context, state) {
+              // Extract parameters using state.extra
+              final params = state.extra as Map<String, dynamic>;
+              final name = params['name'] as String;
+              final image = params['image'] as String;
 
-          
-          builder: (context, state) {
-    // Extract parameters using state.extra
-    final params = state.extra as Map<String, dynamic>;
-    final name = params['name'] as String;
-    final image = params['image'] as String;
-
-    return  CharacterScreen(
-name: name,
-image: image,
-          );}
-        ),
+              return CharacterScreen(
+                name: name,
+                image: image,
+              );
+            }),
         GoRoute(
           path: '/profile',
           name: 'profile',
@@ -91,9 +109,9 @@ image: image,
   }
 }
 
-///************ function we will using for navigation if need to forget history root make it true else false 
+///************ function we will using for navigation if need to forget history root make it true else false
 ///*************        how using  navigateGoOption(context: context, routeName: '/loading',forgetHistory: true );
- 
+
 /// */
 void navigateGoOption({
   required BuildContext context,

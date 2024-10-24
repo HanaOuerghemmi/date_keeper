@@ -1,6 +1,10 @@
 import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
+// import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:date_keeper/features/auth/presentation/cubit/auth/auth_cubit.dart';
+
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
+import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';
 import 'package:date_keeper/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,10 +27,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-      final AppRouter _appRouter = AppRouter(); // Create instance of AppRouter
+    // final AppRouter _appRouter = AppRouter(); // Create instance of AppRouter
 
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => di.sl<AuthCubit>()..appStarted(),
+        ),
         BlocProvider(create: (_) => di.sl<AuthBloc>()),
         BlocProvider(create: (_) => di.sl<CharacterBloc>()),
       ],
@@ -37,10 +44,8 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        routerConfig: _appRouter.router,
-        // home: SignUpPage(),
+        routerConfig: AppRouter().router,
       ),
-      
     );
   }
 }
