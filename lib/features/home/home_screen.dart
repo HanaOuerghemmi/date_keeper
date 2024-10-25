@@ -1,4 +1,5 @@
 import 'package:date_keeper/core/core.dart';
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
 import 'package:date_keeper/features/event/presentation/add_event_screen.dart';
 import 'package:date_keeper/features/event/presentation/widgets/event_card_widget.dart';
@@ -13,25 +14,22 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: HomeAppBar(userName: 'userName'),
       body: Column(
         children: [
           const WidgetCharacter(),
         ],
-
       ),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50), // Adjust the circular radius
         ),
         elevation: 1,
-
-        onPressed: () => navigateGoOption(
-          context: context,
-          routeName: '/addEvent',
-        ),
-
+        onPressed: () => showAddEventModal(context),
+        // navigateGoOption(
+        //   context: context,
+        //   routeName: '/addEvent',
+        // ),
         backgroundColor: primaryColor,
         child: Icon(
           Icons.calendar_month_sharp,
