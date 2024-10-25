@@ -82,14 +82,14 @@ class _$CharacterEventCopyWithImpl<$Res, $Val extends CharacterEvent>
   @override
   $Res call({
     Object? characterEntity = null,
-    Object? fileImage = freezed,
+    Object? fileImage = null,
   }) {
     return _then(_value.copyWith(
       characterEntity: null == characterEntity
           ? _value.characterEntity
           : characterEntity // ignore: cast_nullable_to_non_nullable
               as CharacterEntity,
-      fileImage: freezed == fileImage
+      fileImage: null == fileImage
           ? _value.fileImage
           : fileImage // ignore: cast_nullable_to_non_nullable
               as File,
@@ -120,14 +120,14 @@ class __$$CreateCharacterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? characterEntity = null,
-    Object? fileImage = freezed,
+    Object? fileImage = null,
   }) {
     return _then(_$CreateCharacterImpl(
       characterEntity: null == characterEntity
           ? _value.characterEntity
           : characterEntity // ignore: cast_nullable_to_non_nullable
               as CharacterEntity,
-      fileImage: freezed == fileImage
+      fileImage: null == fileImage
           ? _value.fileImage
           : fileImage // ignore: cast_nullable_to_non_nullable
               as File,
@@ -158,12 +158,12 @@ class _$CreateCharacterImpl implements _CreateCharacter {
             other is _$CreateCharacterImpl &&
             (identical(other.characterEntity, characterEntity) ||
                 other.characterEntity == characterEntity) &&
-            const DeepCollectionEquality().equals(other.fileImage, fileImage));
+            (identical(other.fileImage, fileImage) ||
+                other.fileImage == fileImage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, characterEntity,
-      const DeepCollectionEquality().hash(fileImage));
+  int get hashCode => Object.hash(runtimeType, characterEntity, fileImage);
 
   @JsonKey(ignore: true)
   @override

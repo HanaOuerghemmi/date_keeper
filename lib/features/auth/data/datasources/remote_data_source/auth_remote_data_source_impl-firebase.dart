@@ -27,9 +27,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<Unit> logOut() {
-    // TODO: implement logOut
-    throw UnimplementedError();
+  Future<Unit> logOut() async {
+    await auth.signOut();
+    return unit;
   }
 
   @override
@@ -107,4 +107,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return null;
     }
   }
+
+  @override
+  Future<String> getCurrentUID() async => auth.currentUser!.uid;
+
+  @override
+  Future<bool> isSignIn() async => auth.currentUser?.uid != null;
 }

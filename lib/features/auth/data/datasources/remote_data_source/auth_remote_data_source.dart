@@ -8,4 +8,6 @@ abstract class AuthRemoteDataSource {
   Future<UserModel?> signInWithGoogle();
   Future<UserModel> signInWithApple();
   Future<UserModel> signInAsAnonymous();
+  Future<bool> isSignIn();
+  Future<String> getCurrentUID();
 }

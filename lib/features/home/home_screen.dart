@@ -7,37 +7,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final String uid;
+  const HomeScreen({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HomeAppBar(userName: 'userName', profileImageUrl: '',),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            const WidgetCharacter(),
-            mediumPaddingVert,
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(height: 380, child: EventList()),
-              ),
-            ),
-          ],
-        ),
+
+      appBar: HomeAppBar(userName: 'userName'),
+      body: Column(
+        children: [
+          const WidgetCharacter(),
+        ],
+
       ),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50), // Adjust the circular radius
         ),
         elevation: 1,
-        onPressed: () => showAddEventModal(context),
-        //  navigateGoOption(
-        //                     context: context,
-        //                     routeName: '/addEvent',
-        //                 ),
+
+        onPressed: () => navigateGoOption(
+          context: context,
+          routeName: '/addEvent',
+        ),
+
         backgroundColor: primaryColor,
         child: Icon(
           Icons.calendar_month_sharp,

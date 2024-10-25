@@ -35,14 +35,21 @@ class _LoginWithEmailPageState extends State<LoginWithEmailPage> {
 
 //context.go('/loading') ;
               },
-              loaded: (_) {
+              loaded: (user) {
                 log("state loded");
-                                navigateGoOption(context: context, routeName: '/home');
+                navigateGoOption(
+                  context: context,
+                  routeName: '/home',
+                  forgetHistory: true,
+                  params: {
+                    'uid': user.uid!,
+                  },
+                );
 
                 // Navigator.of(context).pushReplacementNamed('/home');
                 //
                 //                context.go('/home') ;
-                           //  Navigator.pushAndRemoveUntil(
+                //  Navigator.pushAndRemoveUntil(
                 //   context,
                 //   MaterialPageRoute(builder: (context) => const HomeScreen()),
                 //   (Route<dynamic> route) =>
@@ -150,7 +157,9 @@ class _LoginWithEmailPageState extends State<LoginWithEmailPage> {
                         Text("don't have accounnt"),
                         TextButton(
                             onPressed: () {
-                               navigateGoOption(context: context, routeName: '/signUpWithEmail');
+                              navigateGoOption(
+                                  context: context,
+                                  routeName: '/signUpWithEmail');
 
                               // Navigator.push(
                               //   context,
