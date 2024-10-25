@@ -1,8 +1,8 @@
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
-import 'package:date_keeper/features/event/presentation/add_event_screen.dart';
-import 'package:date_keeper/features/event/presentation/widgets/event_card_widget.dart';
+import 'package:date_keeper/features/event%20presentation/presentation/add_event_screen.dart';
+import 'package:date_keeper/features/event%20presentation/presentation/widgets/event_card_widget.dart';
 import 'package:date_keeper/features/home/widgets/home_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

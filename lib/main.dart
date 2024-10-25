@@ -2,10 +2,7 @@ import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 // import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:date_keeper/features/auth/presentation/cubit/auth/auth_cubit.dart';
-
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
-import 'package:date_keeper/features/home/home_screen.dart';
-import 'package:date_keeper/features/onbording/splash_screen.dart';
 import 'package:date_keeper/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
