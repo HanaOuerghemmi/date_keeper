@@ -115,7 +115,8 @@ class AuthRepositoryImpl implements AuthRepository {
       try {
         log("in function .....");
         final currentUid = await remoteDataSource.getCurrentUID();
-        return right(currentUid);
+        log(currentUid);
+        return right("repository" + currentUid);
       } on ServerException {
         return left(ServerFailure());
       }

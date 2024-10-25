@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:date_keeper/features/auth/domain/usecases/log_out.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -55,6 +57,7 @@ class AuthCubit extends Cubit<AuthState> {
       uid.fold((failure) async {
         emit(const AuthState.unAuthenticated()); //_mapFailureToMessage(failure)
       }, (uid) {
+        log(uid);
         emit(AuthState.authenticated(uid: uid));
       });
     } catch (_) {
