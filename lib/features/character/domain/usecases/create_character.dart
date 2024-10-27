@@ -16,6 +16,7 @@ class CreateCaracterUsercase {
 
   Future<Either<Failure, Unit>> call(
       CharacterEntity characterEntity, File imageFile) async {
+    //! this is i refactor ....
     // First, upload the image and handle errors
     final imageUploadResult =
         await characterRepository.uploadCharacterImage(imageFile);

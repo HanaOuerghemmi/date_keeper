@@ -1,3 +1,5 @@
+import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
+
 class CharacterModel {
   final String? id; // Unique ID for Firestore reference
   final String? name;
@@ -33,5 +35,15 @@ class CharacterModel {
       'profilePicture': profilePicture,
       'additionalInfo': additionalInfo,
     };
+  }
+
+  CharacterEntity toEntity() {
+    return CharacterEntity(
+      id: id,
+      name: name,
+      relationship: relationship,
+      profilePicture: profilePicture,
+      additionalInfo: additionalInfo,
+    );
   }
 }

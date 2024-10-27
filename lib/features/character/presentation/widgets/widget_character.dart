@@ -1,79 +1,92 @@
-import 'package:date_keeper/core/core.dart';
-import 'package:date_keeper/core/rooting/app_rooting.dart';
-import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class WidgetCharacter extends StatelessWidget {
+import 'package:date_keeper/core/core.dart';
+
+import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
+import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class WidgetCharacter extends StatefulWidget {
   const WidgetCharacter({super.key});
 
   @override
+  State<WidgetCharacter> createState() => _WidgetCharacterState();
+}
+
+class _WidgetCharacterState extends State<WidgetCharacter> {
+  @override
+  void initState() {
+    context.read<GetAllCharacterCubit>().getAllCharacters();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 100,
-          decoration: BoxDecoration(
-            color: whiteColor,
-            boxShadow: [
-              BoxShadow(
-                color: black.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(0, 3),
+    log('widget characters');
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height: 100,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          boxShadow: [
+            BoxShadow(
+              color: black.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //*****  add new charcter *************/
+              CharcterItemWidget(
+                onTap: () => showCreateCharacterDialog(context),
+                image: Icon(Icons.add, size: 30),
+                text: 'New',
+              ),
+
+              //*****  list all charcter *************/
+
+              Expanded(
+                child: BlocBuilder<GetAllCharacterCubit, GetAllCharacterState>(
+                  builder: (context, state) {
+                    return state.when(
+                      initial: () =>
+                          const Center(child: Text("No users available.")),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      loaded: (characters) => characters.isEmpty
+                          ? const Center(child: Text("No users available."))
+                          : ListView.builder(
+                              itemCount: characters.length,
+                              itemBuilder: (context, index) {
+                                final character = characters[index];
+                                return CharcterItemWidget(
+                                  text: character.name ?? '',
+                                  image: Image.network(
+                                      character.profilePicture ?? ''),
+                                  onTap: () {},
+                                );
+                              },
+                            ),
+                      error: () => Center(child: Text('error')),
+                    );
+                  },
+                ),
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //*****  add new charcter *************/
-                CharcterItemWidget(
-                  onTap: () =>
-                  showCreateCharacterDialog(context),
-                  /// navigateGoOption(
-                    ///  context: context, routeName: '/createCaracter'),
-                  image: Icon(Icons.add, size: 30),
-                  text: 'New',
-                ),
-                
-                
-                //*****  list all charcter *************/
-
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: characterList.map((character) {
-                        return CharcterItemWidget(
-                          onTap: () => navigateGoOption(
-                            context: context,
-                            routeName: '/charcter',
-                            params: {
-                              'name': character['name'],
-                              'image': character['image'],
-                            },
-                          ),
-                          image: Image.network(
-                            character['image'],
-                            fit: BoxFit.cover,
-                          ),
-                          text: character['name'],
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ),
-      ],
-    );
+      ),
+    ]);
   }
 }
 
