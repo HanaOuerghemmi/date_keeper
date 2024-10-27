@@ -20,6 +20,15 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
     required this.firebaseStorage,
   });
 
+  Stream<QuerySnapshot<Object?>>? streamGetAllUsers() {
+    final uidUser = auth.currentUser?.uid;
+    return firebaseFirestore
+        .collection(collectionUsersName)
+        .doc(uidUser)
+        .collection(collectionCharacterName)
+        .snapshots();
+  }
+
   @override
   Future<void> createCharacter(CharacterModel characterModel) async {
     final uidUser = auth.currentUser?.uid;
@@ -38,9 +47,57 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
   }
 
   @override
-  Future<List<CharacterModel>> getAllCharactersOfUser(String idUser) {
-    // TODO: implement getAllCharactersOfUser
-    throw UnimplementedError();
+  Stream<List<CharacterModel>> getAllCharactersOfUser() async* {
+    final uidUser = auth.currentUser?.uid;
+
+    yield* firebaseFirestore
+        .collection(collectionUsersName)
+        .doc(uidUser)
+        .collection(collectionCharacterName)
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((doc) => CharacterModel.fromMap(doc.data(), doc.id))
+            .toList());
+
+    @override
+    Future<CharacterModel> updateCharacter(CharacterModel characterModel) {
+      // TODO: implement updateCharacter
+      throw UnimplementedError();
+    }
+
+    // Future<String> uploadImage(File imageFile) async {
+    //   try {
+    //     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    //     Reference storageRef =
+    //         firebaseStorage.ref().child('character_images/$fileName');
+    //     UploadTask uploadTask = storageRef.putFile(imageFile);
+    //     TaskSnapshot snapshot = await uploadTask;
+    //     String downloadUrl = await snapshot.ref.getDownloadURL();
+    //     return downloadUrl;
+    //   } catch (e) {
+    //     print("Error uploading image: $e");
+    //     return '';
+    //   }
+    // }
+
+    @override
+    Future<String> uploadCharacterImage(File imageFile) async {
+      // final ref = firebaseStorage.ref().child('characters/${imageFile}');
+      // final uploadTask = await ref.putFile(imageFile);
+      // return await uploadTask.ref.getDownloadURL();
+      try {
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference storageRef =
+            firebaseStorage.ref().child('character_images/$fileName');
+        UploadTask uploadTask = storageRef.putFile(imageFile);
+        TaskSnapshot snapshot = await uploadTask;
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        return downloadUrl;
+      } catch (e) {
+        print("Error uploading image: $e");
+        return '';
+      }
+    }
   }
 
   @override
@@ -49,37 +106,9 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
     throw UnimplementedError();
   }
 
-  // Future<String> uploadImage(File imageFile) async {
-  //   try {
-  //     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-  //     Reference storageRef =
-  //         firebaseStorage.ref().child('character_images/$fileName');
-  //     UploadTask uploadTask = storageRef.putFile(imageFile);
-  //     TaskSnapshot snapshot = await uploadTask;
-  //     String downloadUrl = await snapshot.ref.getDownloadURL();
-  //     return downloadUrl;
-  //   } catch (e) {
-  //     print("Error uploading image: $e");
-  //     return '';
-  //   }
-  // }
-
   @override
-  Future<String> uploadCharacterImage(File imageFile) async {
-    // final ref = firebaseStorage.ref().child('characters/${imageFile}');
-    // final uploadTask = await ref.putFile(imageFile);
-    // return await uploadTask.ref.getDownloadURL();
-    try {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference storageRef =
-          firebaseStorage.ref().child('character_images/$fileName');
-      UploadTask uploadTask = storageRef.putFile(imageFile);
-      TaskSnapshot snapshot = await uploadTask;
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      print("Error uploading image: $e");
-      return '';
-    }
+  Future<String> uploadCharacterImage(File imageFile) {
+    // TODO: implement uploadCharacterImage
+    throw UnimplementedError();
   }
 }

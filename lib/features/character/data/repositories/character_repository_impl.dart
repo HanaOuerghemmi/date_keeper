@@ -46,10 +46,26 @@ class CharacterRepositoryImpl implements CharacterRepository {
   }
 
   @override
-  Future<Either<Failure, List<CharacterEntity>>> getAllCharactersOfUser(
-      String idUser) {
-    // TODO: implement getAllCharactersOfUser
-    throw UnimplementedError();
+  Stream<Either<Failure, List<CharacterEntity>>>
+      getAllCharactersOfUser() async* {
+    if (await networkInfo.isConnected) {
+      try {
+        // Assuming getAllCharactersOfUser returns a Stream<List<CharacterModel>>
+        await for (final listCharacters
+            in remoteDataSource.getAllCharactersOfUser()) {
+          // Flatten the list of CharacterModel to a list of CharacterEntity
+          final listCharactersEntities =
+              listCharacters.map((character) => character.toEntity()).toList();
+
+          // Yield the list of CharacterEntity wrapped in Right
+          yield Right(listCharactersEntities);
+        }
+      } on ServerException {
+        yield Left(ServerFailure());
+      }
+    } else {
+      yield Left(OfflineFailure());
+    }
   }
 
   @override
