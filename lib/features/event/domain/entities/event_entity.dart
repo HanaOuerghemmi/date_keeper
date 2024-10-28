@@ -1,15 +1,16 @@
 
 
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class EventEntity extends Equatable {
-  CharacterEntity user;
-  String title;
-  String description;
-  Color statusColor;
-  String type;
+  CharacterModel? user;
+  String? title;
+  String? description;
+  Color? statusColor;
+  String? type;
 
   EventEntity({
     required this.user,
