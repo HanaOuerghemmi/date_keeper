@@ -1,6 +1,6 @@
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
-import 'package:date_keeper/features/event/presentation/widgets/events_ittems.dart';
+import 'package:date_keeper/features/event%20presentation/presentation/widgets/events_ittems.dart';
 import 'package:flutter/material.dart';
 
   void showAddEventModal(BuildContext context) {

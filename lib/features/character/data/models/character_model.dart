@@ -26,7 +26,15 @@ class CharacterModel {
       additionalInfo: data['additionalInfo'] ?? '',
     );
   }
-
+factory CharacterModel.fromJson(Map<String, dynamic> json) {
+    return CharacterModel(
+      id: json['id'] as String?,
+      name: json['name'] as String?,
+      relationship: json['relationship'] as String?,
+      profilePicture: json['profilePicture'] as String?,
+      additionalInfo: json['additionalInfo'] as String?,
+    );
+  }
   // Convert CharacterEntity instance to Map for Firestore
   Map<String, dynamic> toJson() {
     return {

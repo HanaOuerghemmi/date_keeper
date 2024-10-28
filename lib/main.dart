@@ -3,7 +3,6 @@ import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 // import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:date_keeper/features/auth/presentation/cubit/auth/auth_cubit.dart';
-
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
 import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
 import 'package:date_keeper/features/home/home_screen.dart';

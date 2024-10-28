@@ -1,7 +1,7 @@
-import 'package:date_keeper/features/event/presentation/widgets/confirmation_dialog.dart';
-import 'package:date_keeper/features/event/presentation/widgets/event_card.dart';
-import 'package:date_keeper/features/event/presentation/widgets/swipe_widget.dart';
-import 'package:date_keeper/features/event/presentation/widgets/update_event_popup.dart';
+import 'package:date_keeper/features/event%20presentation/presentation/widgets/confirmation_dialog.dart';
+import 'package:date_keeper/features/event%20presentation/presentation/widgets/event_card.dart';
+import 'package:date_keeper/features/event%20presentation/presentation/widgets/swipe_widget.dart';
+import 'package:date_keeper/features/event%20presentation/presentation/widgets/update_event_popup.dart';
 import 'package:flutter/material.dart';
 
 class EventList extends StatefulWidget {
