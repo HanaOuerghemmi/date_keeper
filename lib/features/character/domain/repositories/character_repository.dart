@@ -11,7 +11,6 @@ abstract class CharacterRepository {
   Future<Either<Failure, CharacterEntity>> updateCharacter(
       CharacterEntity characterEntity);
   Future<Either<Failure, CharacterEntity>> deleteCharacter();
-  Future<Either<Failure, List<CharacterEntity>>> getAllCharactersOfUser(
-      String idUser);
+  Stream<Either<Failure, List<CharacterEntity>>> getAllCharactersOfUser();
   Future<Either<Failure, String>> uploadCharacterImage(File imageFile);
 }
