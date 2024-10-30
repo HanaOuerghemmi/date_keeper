@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:date_keeper/core/constants/app_constant.dart';
 import 'package:date_keeper/core/error/failures.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/event/data/datasources/remote_data_source/event_remotedatasource.dart';
@@ -17,10 +18,26 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource{
  
  
   @override
-  Future<Either<Failure, EventModel>> createEvent({List<CharacterEntity>? listCharcter}) {
-    // TODO: implement createEvent
-    throw UnimplementedError();
+ Future<Either<Failure, EventModel>> createEvent({ EventModel? event}) async {
+  try {
+    final uidUser = auth.currentUser?.uid;
+    if (uidUser == null) {
+      return Left(OfflineFailure('User not logged in'));
+    }
+
+    //********** Add event to Firestore*///
+    await firebaseFirestore
+        .collection(collectionUsersName)
+        .doc(uidUser)
+        .collection(collectionEventName)
+        .add(event!.toJson());
+
+    return Right(event);
+  } catch (e) {
+    return Left(ServerFailure('Failed to create event: $e'));
   }
+}
+
 
   @override
   Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) {

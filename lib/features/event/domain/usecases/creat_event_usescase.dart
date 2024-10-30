@@ -8,7 +8,7 @@ class CreatEventUsescase {
     final EventRepository eventRepository;
 
   CreatEventUsescase({required this.eventRepository});
-Future<Either<Failure, EventEntity>> call(List<CharacterEntity>? listCharcter) async{
-  return eventRepository.createEvent(listCharcter: listCharcter );
+Future<Either<Failure, EventEntity>> call(EventEntity? event) async{
+  return eventRepository.createEvent(event: event );
 }
 }
