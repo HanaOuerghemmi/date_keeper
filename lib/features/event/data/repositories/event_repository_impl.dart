@@ -18,7 +18,13 @@ final EventRemoteDatasourceImpl remoteDataSource;
 
     if (await networkInfo.isConnected) {
       try {
-        await remoteDataSource.createEvent(event: event as EventModel);
+        final EventModel eventModel = EventModel(
+          user: event!.user, 
+          title: event.title, 
+         description : event.description, 
+          statusColor: event.statusColor, 
+          type: event.type, date: event.date);
+        await remoteDataSource.createEvent(event: eventModel);
         return right(event);
       } on ServerException {
         return left(ServerFailure());

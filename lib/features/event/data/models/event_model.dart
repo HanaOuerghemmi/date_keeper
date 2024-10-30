@@ -8,14 +8,16 @@ class EventModel extends EventEntity {
     required CharacterModel? user,
     required String? title,
     required String? description,
-    required Color? statusColor,
+    required String? statusColor,
     required String? type,
+    required String? date,
   }) : super(
           user: user,
           title: title,
           description: description,
           statusColor: statusColor,
           type: type,
+          date: date,
         );
 
   // Factory constructor for creating an instance from JSON data
@@ -24,8 +26,9 @@ class EventModel extends EventEntity {
       user: json['user'] != null ? CharacterModel.fromMap(json['user'], '') : null,
       title: json['title'] as String?,
       description: json['description'] as String?,
-      statusColor: json['statusColor'] != null ? Color(json['statusColor']) : null,
+      statusColor: json['statusColor']as String,
       type: json['type'] as String?,
+      date: json['date'] as String?,
     );
   }
 
@@ -36,8 +39,9 @@ class EventModel extends EventEntity {
       user: data['user'] != null ? CharacterModel.fromJson(data['user']) : null,
       title: data['title'] as String?,
       description: data['description'] as String?,
-      statusColor: data['statusColor'] != null ? Color(data['statusColor']) : null,
+      statusColor: data['statusColor'] ,
       type: data['type'] as String?,
+      date: data['date'] as String?
     );
   }
 
@@ -47,8 +51,9 @@ class EventModel extends EventEntity {
       'user':  user?.toJson(),
       'title': title,
       'description': description,
-      'statusColor': statusColor?.value,
+      'statusColor': statusColor,
       'type': type,
+      'date':date,
     };
   }
 }

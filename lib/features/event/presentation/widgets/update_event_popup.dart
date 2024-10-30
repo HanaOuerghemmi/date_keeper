@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:date_keeper/features/event%20presentation/presentation/widgets/event_card_widget.dart';
+import 'package:date_keeper/features/event/presentation/widgets/event_card_widget.dart';
 
 Future<bool> showUpdatePopup(
     BuildContext context, Event event, int index) async {
