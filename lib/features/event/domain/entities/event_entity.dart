@@ -9,8 +9,9 @@ class EventEntity extends Equatable {
   CharacterModel? user;
   String? title;
   String? description;
-  Color? statusColor;
+  String? statusColor;
   String? type;
+  String? date;
 
   EventEntity({
     required this.user,
@@ -18,8 +19,9 @@ class EventEntity extends Equatable {
     required this.description,
     required this.statusColor,
     required this.type,
+    required this.date
   });
   
   @override
-  List<Object?> get props => [user, title, description, statusColor, type];
+  List<Object?> get props => [user, title, description, statusColor, type, date];
 }
