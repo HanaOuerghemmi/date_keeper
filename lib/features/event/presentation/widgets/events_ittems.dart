@@ -1,5 +1,7 @@
 
- import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
+ import 'dart:developer';
+
+import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
@@ -20,9 +22,10 @@ class _StatusItemSelectorState extends State<StatusItemSelector> {
                 child: Center(
                   child: BlockPicker(
                     pickerColor: widget.selectedColor,
-                    onColorChanged: (Color color) {
+                    onColorChanged: (Color? color) {
                       setState(() {
                         widget.selectedColor = color;
+                        log('color selected ' + widget.selectedColor.toString());
                       });
                     },
                     availableColors: [
@@ -34,8 +37,6 @@ class _StatusItemSelectorState extends State<StatusItemSelector> {
                 ),
               );
   }
-
-
 }
 
 

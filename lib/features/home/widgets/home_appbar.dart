@@ -44,10 +44,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               Text(_getGreeting(), style: Theme.of(context).textTheme.bodyLarge),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 500),
-                child: Text(
-                  userName,
-                  key: ValueKey(userName), 
-                  style: Theme.of(context).textTheme.bodyMedium,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Text(
+                    userName,
+                    key: ValueKey(userName), 
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
               ),
             ],

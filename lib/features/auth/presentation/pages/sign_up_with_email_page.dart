@@ -29,14 +29,20 @@ class _SignUpWithEmailPageState extends State<SignUpWithEmailPage> {
           state.maybeWhen(
               initial: () {},
               loading: () {
-
                 navigateGoOption(context: context, routeName: '/loading');
               },
-              loaded: (_) {
+              loaded: (user) {
                 log("state loded");
                 // Navigator.of(context).pushReplacementNamed('/home');
-               // context.go('/home');
-               navigateGoOption(context: context, routeName: '/home', forgetHistory: true);
+                // context.go('/home');
+                navigateGoOption(
+                  context: context,
+                  routeName: '/home',
+                  forgetHistory: true,
+                  params: {
+                    'uid': user.uid!,
+                  },
+                );
 
                 // Navigator.pushAndRemoveUntil(
                 //   context,

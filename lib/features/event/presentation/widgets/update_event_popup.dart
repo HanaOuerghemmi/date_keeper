@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:date_keeper/features/event/presentation/widgets/event_card_widget.dart';
 
 Future<bool> showUpdatePopup(
-    BuildContext context, Event event, int index) async {
+    BuildContext context,  event, int index) async {
   TextEditingController titleController =
       TextEditingController(text: event.title);
   TextEditingController descriptionController =

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_keeper/core/network/network_info.dart';
 import 'package:date_keeper/features/auth/auth_injection_container.dart';
 import 'package:date_keeper/features/character/character_injection_container.dart';
+import 'package:date_keeper/features/event/event_injection_container.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -41,4 +42,5 @@ Future<void> init() async {
   await authInjectionContainer();
   await characterInjectionContainer();
   // await profileInjectionContainer();
+  await eventInjectionContainer();
 }

@@ -1,3 +1,4 @@
+import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 import 'package:flutter/material.dart';
 
 class Event {
@@ -19,7 +20,7 @@ class Event {
 }
 
 class EventCard extends StatefulWidget {
-  final  event;
+  final EventEntity event;
 
   const EventCard({super.key, required this.event});
 
@@ -32,6 +33,13 @@ class _EventCardState extends State<EventCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Handling null or empty descriptions safely
+    final descriptionText = widget.event.description ?? '';
+    final hasLongDescription = descriptionText.length > 25;
+    final displayDescription = isExpanded || !hasLongDescription
+        ? descriptionText
+        : '${descriptionText.substring(0, 25)}...';
+
     return Card(
       elevation: 5,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -45,7 +53,7 @@ class _EventCardState extends State<EventCard> {
               children: [
                 CircleAvatar(
                   radius: 24,
-                  backgroundImage: NetworkImage(widget.event.picture), // Event picture
+                  backgroundImage: NetworkImage(''), // Event picture
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -56,7 +64,7 @@ class _EventCardState extends State<EventCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.event.title,
+                            widget.event.title ?? 'Untitled',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -67,14 +75,14 @@ class _EventCardState extends State<EventCard> {
                             width: 12,
                             height: 12,
                             decoration: BoxDecoration(
-                              color: widget.event.statusColor, // Event status color
+                              color:  Colors.grey, // Event status color
                               shape: BoxShape.circle,
                             ),
                           ),
                         ],
                       ),
                       Text(
-                        widget.event.name,
+                        widget.event.type ?? 'Unknown Type',
                         style: TextStyle(color: Colors.grey[700]),
                       ),
                     ],
@@ -82,18 +90,30 @@ class _EventCardState extends State<EventCard> {
                 ),
                 const SizedBox(width: 12),
                 const Text(
-                  '12 days',
+                  '12 days', // Event duration, hardcoded for now
                   style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
             const SizedBox(height: 12),
             Text(
-              isExpanded
-                  ? '${widget.event.description} Event Date: 12 Oct 2024, Type: ${widget.event.type}.'
-                  : '${widget.event.description.substring(0, 25)}...',
+              displayDescription.isNotEmpty
+                  ? displayDescription
+                  : 'No description available',
               style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
+            if (isExpanded) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Type: ${widget.event.type ?? 'Unknown'}',
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Event Date: ${widget.event.date}', // Display event date here
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,

@@ -6,7 +6,7 @@ import 'package:date_keeper/features/auth/presentation/pages/main_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/sign_up_with_email_page.dart';
 import 'package:date_keeper/features/character/presentation/pages/character_screen.dart';
 import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
-import 'package:date_keeper/features/event/presentation/add_event_screen.dart';
+import 'package:date_keeper/features/event/presentation/pages/add_event_screen.dart';
 import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:date_keeper/features/onbording/onbording_screen.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';

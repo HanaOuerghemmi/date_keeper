@@ -1,9 +1,10 @@
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/core/rooting/app_rooting.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
-import 'package:date_keeper/features/event/presentation/add_event_screen.dart';
+import 'package:date_keeper/features/event/presentation/pages/add_event_screen.dart';
 import 'package:date_keeper/features/event/presentation/widgets/event_card_widget.dart';
 import 'package:date_keeper/features/home/widgets/home_appbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -13,12 +14,24 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+final uidUser = FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
-      appBar: HomeAppBar(userName: 'userName'),
-      body: Column(
-        children: [
-          const WidgetCharacter(),
-        ],
+      appBar: HomeAppBar(userName: uidUser.toString()),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Column(
+          children: [
+            const WidgetCharacter(),
+            mediumPaddingVert,
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: SizedBox(height: 500, child: EventList()),
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
