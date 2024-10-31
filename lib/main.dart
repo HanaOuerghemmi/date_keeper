@@ -6,6 +6,7 @@ import 'package:date_keeper/features/auth/presentation/cubit/auth/auth_cubit.dar
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
 import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/create_event_cubit/create_event_cubit.dart';
+import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
 import 'package:date_keeper/features/home/home_screen.dart';
 import 'package:date_keeper/features/onbording/splash_screen.dart';
 import 'package:date_keeper/firebase_options.dart';
@@ -49,6 +50,8 @@ class MyApp extends StatelessWidget {
 
         //********* event bloc **********/
         BlocProvider(create: (_) => di.sl<CreateEventCubit>()),
+        BlocProvider(create: (_) => di.sl<GetallEventCubit>()),
+
 
       ],
       child: MaterialApp.router(

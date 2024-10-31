@@ -25,7 +25,7 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource{
       return Left(OfflineFailure('User not logged in'));
     }
 
-    //********** Add event to Firestore*///
+             //********** Add event to Firestore*///
     await firebaseFirestore
         .collection(collectionUsersName)
         .doc(uidUser)
@@ -39,17 +39,41 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource{
 }
 
 
+
+        //*************** get all evevent  *****************/
+
+
+@override
+Future<Either<Failure, List<EventModel>>> getAllEvents() async {
+  try {
+    final uidUser = auth.currentUser?.uid;
+    if (uidUser == null) {
+      return Left(OfflineFailure('User not logged in'));
+    }
+    final querySnapshot = await firebaseFirestore
+        .collection(collectionUsersName)
+        .doc(uidUser)
+        .collection(collectionEventName)
+        .get();
+
+    final events = querySnapshot.docs
+        .map((doc) => EventModel.fromJson(doc.data()))
+        .toList();
+
+    return Right(events);
+  } catch (e) {
+    return Left(ServerFailure('Failed to retrieve events: $e'));
+  }
+}
+
+
   @override
   Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) {
     // TODO: implement deleteEvent
     throw UnimplementedError();
   }
 
-  @override
-  Future<Either<Failure, List<EventModel>>> getAllEvents() {
-    // TODO: implement getAllEvents
-    throw UnimplementedError();
-  }
+
 
   @override
   Future<Either<Failure, EventEntity>> updateEvent({EventEntity? updatedEvent}) {
