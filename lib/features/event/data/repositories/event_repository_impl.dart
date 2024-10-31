@@ -34,6 +34,41 @@ final EventRemoteDatasourceImpl remoteDataSource;
     }
 
   }
+  ///********************* get all events  ******************/
+  
+@override
+Future<Either<Failure, List<EventEntity>>> getAllEvents() async {
+  if (await networkInfo.isConnected) {
+    try {
+      final eventsResult = await remoteDataSource.getAllEvents();
+      // Check if the result is a success or failure
+      return eventsResult.fold(
+        (failure) => Left(failure), // Return the failure if it exists
+        (eventsModelList) {
+          // Map each EventModel to an EventEntity
+          final eventsEntityList = eventsModelList.map((eventModel) {
+            return EventEntity(
+              user: eventModel.user,
+              title: eventModel.title,
+              description: eventModel.description,
+              statusColor: eventModel.statusColor,
+              type: eventModel.type,
+              date: eventModel.date,
+            );
+          }).toList();
+
+          return Right(eventsEntityList);
+        },
+      );
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  } else {
+    return Left(OfflineFailure());
+  }
+}
+
+
 
   @override
   Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) {
@@ -41,11 +76,7 @@ final EventRemoteDatasourceImpl remoteDataSource;
     throw UnimplementedError();
   }
 
-  @override
-  Future<Either<Failure, List<EventEntity>>> getAllEvents() {
-    // TODO: implement getAllEvents
-    throw UnimplementedError();
-  }
+
 
   @override
   Future<Either<Failure, EventEntity>> updateEvent({EventEntity? updatedEvent}) {
