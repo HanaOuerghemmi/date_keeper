@@ -1,23 +1,7 @@
 import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 import 'package:flutter/material.dart';
 
-class Event {
-  final String picture;
-  final String title;
-  final String name;
-  final String description;
-  final Color statusColor;
-  final String type;
 
-  Event({
-    required this.picture,
-    required this.title,
-    required this.name,
-    required this.description,
-    required this.statusColor,
-    required this.type,
-  });
-}
 
 class EventCard extends StatefulWidget {
   final EventEntity event;
@@ -81,6 +65,7 @@ class _EventCardState extends State<EventCard> {
                           ),
                         ],
                       ),
+                      Text(widget.event.id!),
                       Text(
                         widget.event.type ?? 'Unknown Type',
                         style: TextStyle(color: Colors.grey[700]),

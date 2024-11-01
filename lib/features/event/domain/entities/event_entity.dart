@@ -12,16 +12,17 @@ class EventEntity extends Equatable {
   String? statusColor;
   String? type;
   String? date;
-
+String? id;
   EventEntity({
     required this.user,
     required this.title,
     required this.description,
     required this.statusColor,
     required this.type,
+this.id,
     required this.date
   });
   
   @override
-  List<Object?> get props => [user, title, description, statusColor, type, date];
+  List<Object?> get props => [user, title, description, statusColor, type, date, id];
 }

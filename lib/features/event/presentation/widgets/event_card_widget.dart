@@ -1,4 +1,5 @@
 import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
+import 'package:date_keeper/features/event/presentation/bloc/delete_event_cubit/delete_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/widgets/confirmation_dialog.dart';
 import 'package:date_keeper/features/event/presentation/widgets/event_card.dart';
@@ -23,6 +24,52 @@ class _EventListState extends State<EventList> {
 
   void _fetchEvents() {
     context.read<GetallEventCubit>().getAllEvents();
+  }
+
+  Future<bool> _confirmDelete(EventEntity item,  ) async {
+    final confirmed = await showConfirmationDialog(
+      context,
+      'Confirm Delete',
+      'Are you sure you want to delete ${item.title}?',
+    );
+
+    if (confirmed) {
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => Center(child: CircularProgressIndicator()),
+      );
+
+      // Trigger delete event
+      context.read<DeleteEventCubit>().deleteEvent(item);
+
+      // Listen for delete state changes
+      final deleteCubit = context.read<DeleteEventCubit>();
+      deleteCubit.stream.listen((state) {
+        state.map(
+          initial: (_) {},
+          loading: (_) {
+            // Loading state is handled by the loading dialog
+          },
+          success: (_) {
+            Navigator.of(context).pop(); // Close the loading dialog
+            _fetchEvents(); // Refresh events
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('event title:${item.title} id ${item.id} deleted successfully')),
+            );
+          },
+          error: (errorState) {
+            Navigator.of(context).pop(); // Close the loading dialog
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(errorState.message)),
+            );
+          },
+        );
+      });
+    }
+
+    return confirmed;
   }
 
   @override
@@ -54,18 +101,12 @@ class _EventListState extends State<EventList> {
               itemBuilder: (context, index) {
                 final item = events[index];
                 return Dismissible(
-                  key: Key(item.title ?? 'event_$index'),
+                  key: Key(item.id!),
                   background: swipeRightAction(),
                   secondaryBackground: swipeLeftAction(),
                   confirmDismiss: (direction) async {
                     if (direction == DismissDirection.endToStart) {
-                      final confirmed = await showConfirmationDialog(
-                        context,
-                        'Confirm Delete',
-                        'Are you sure you want to delete ${item.title}?',
-                      );
-                      if (confirmed) _fetchEvents();
-                      return confirmed;
+                      return await _confirmDelete(item);
                     } else if (direction == DismissDirection.startToEnd) {
                       final updated = await showUpdatePopup(context, item, index);
                       if (updated != null) _fetchEvents();
@@ -75,7 +116,7 @@ class _EventListState extends State<EventList> {
                   },
                   onDismissed: (direction) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("${item.title} ${direction == DismissDirection.endToStart ? 'deleted' : 'updated'}")),
+                      SnackBar(content: Text("${item.title} ${item.id} ${direction == DismissDirection.endToStart ? 'deleted' : 'updated'}")),
                     );
                   },
                   child: EventCard(event: item),

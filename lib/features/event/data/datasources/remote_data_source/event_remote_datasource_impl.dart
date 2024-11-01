@@ -1,84 +1,139 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:date_keeper/core/constants/app_constant.dart';
 import 'package:date_keeper/core/error/failures.dart';
-import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/event/data/datasources/remote_data_source/event_remotedatasource.dart';
 import 'package:date_keeper/features/event/data/models/event_model.dart';
 import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class EventRemoteDatasourceImpl implements EventRemotedatasource{
-   final FirebaseFirestore firebaseFirestore;
+class EventRemoteDatasourceImpl implements EventRemotedatasource {
+  final FirebaseFirestore firebaseFirestore;
   final FirebaseAuth auth;
   final FirebaseStorage firebaseStorage;
 
-  EventRemoteDatasourceImpl({required this.firebaseFirestore, required this.auth, required this.firebaseStorage});
- 
- 
+  EventRemoteDatasourceImpl({
+    required this.firebaseFirestore,
+    required this.auth,
+    required this.firebaseStorage,
+  });
+
   @override
- Future<Either<Failure, EventModel>> createEvent({ EventModel? event}) async {
-  try {
-    final uidUser = auth.currentUser?.uid;
-    if (uidUser == null) {
-      return Left(OfflineFailure('User not logged in'));
+  Future<Either<Failure, EventModel>> createEvent({EventModel? event}) async {
+    if (event == null) {
+      return Left(ServerFailure('Event cannot be null'));
     }
 
-             //********** Add event to Firestore*///
-    await firebaseFirestore
-        .collection(collectionUsersName)
-        .doc(uidUser)
-        .collection(collectionEventName)
-        .add(event!.toJson());
+    try {
+      final uidUser = auth.currentUser?.uid;
+      if (uidUser == null) {
+        return Left(OfflineFailure('User not logged in'));
+      }
 
-    return Right(event);
-  } catch (e) {
-    return Left(ServerFailure('Failed to create event: $e'));
-  }
-}
+      // Add event to Firestore
+      final docRef = await firebaseFirestore
+          .collection(collectionUsersName)
+          .doc(uidUser)
+          .collection(collectionEventName)
+          .add(event.toJson());
+          
+      // Create event model with the generated ID
+      final eventWithId = event.copyWith(id: docRef.id);
+      await docRef.set(eventWithId.toJson(), SetOptions(merge: true));
 
-
-
-        //*************** get all evevent  *****************/
-
-
-@override
-Future<Either<Failure, List<EventModel>>> getAllEvents() async {
-  try {
-    final uidUser = auth.currentUser?.uid;
-    if (uidUser == null) {
-      return Left(OfflineFailure('User not logged in'));
+      return Right(eventWithId);
+    } catch (e) {
+      return Left(ServerFailure('Failed to create event: $e'));
     }
-    final querySnapshot = await firebaseFirestore
-        .collection(collectionUsersName)
-        .doc(uidUser)
-        .collection(collectionEventName)
-        .get();
-
-    final events = querySnapshot.docs
-        .map((doc) => EventModel.fromJson(doc.data()))
-        .toList();
-
-    return Right(events);
-  } catch (e) {
-    return Left(ServerFailure('Failed to retrieve events: $e'));
   }
-}
-
 
   @override
-  Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) {
-    // TODO: implement deleteEvent
-    throw UnimplementedError();
+  Future<Either<Failure, List<EventModel>>> getAllEvents() async {
+    try {
+      final uidUser = auth.currentUser?.uid;
+      if (uidUser == null) {
+        return Left(OfflineFailure('User not logged in'));
+      }
+
+      final querySnapshot = await firebaseFirestore
+          .collection(collectionUsersName)
+          .doc(uidUser)
+          .collection(collectionEventName)
+          .get();
+
+      final events = querySnapshot.docs
+          .map((doc) => EventModel.fromJson(doc.data()))
+          .toList();
+
+      return Right(events);
+    } catch (e) {
+      return Left(ServerFailure('Failed to retrieve events: $e'));
+    }
   }
-
-
 
   @override
-  Future<Either<Failure, EventEntity>> updateEvent({EventEntity? updatedEvent}) {
-    // TODO: implement updateEvent
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) async {
+    try {
+      final uidUser = auth.currentUser?.uid;
+      if (uidUser == null) {
+        return Left(OfflineFailure('User not logged in'));
+      }
+
+      final eventDocId = deletedEvent?.id; // Ensure you're checking for null
+      log('Deleting event with ID: $eventDocId');
+
+      if (eventDocId == null) {
+        return Left(ServerFailure('Invalid event ID'));
+      }
+
+      await firebaseFirestore
+          .collection(collectionUsersName)
+          .doc(uidUser)
+          .collection(collectionEventName)
+          .doc(eventDocId)
+          .delete();
+
+      log('Successfully deleted event with ID: $eventDocId');
+      return const Right(unit);
+    } catch (e) {
+      log('Error deleting event: $e');
+      return Left(ServerFailure('Failed to delete event: $e'));
+    }
   }
-  
+
+  @override
+  Future<Either<Failure, EventEntity>> updateEvent({EventEntity? updatedEvent}) async {
+        throw UnimplementedError();
+
+  //   if (updatedEvent == null) {
+  //     return Left(ServerFailure('Updated event cannot be null'));
+  //   }
+
+  //   try {
+  //     final uidUser = auth.currentUser?.uid;
+  //     if (uidUser == null) {
+  //       return Left(OfflineFailure('User not logged in'));
+  //     }
+
+  //     final eventDocId = updatedEvent.id; // Ensure the updatedEvent has an ID
+  //     if (eventDocId == null) {
+  //       return Left(ServerFailure('Invalid event ID'));
+  //     }
+
+  //     await firebaseFirestore
+  //         .collection(collectionUsersName)
+  //         .doc(uidUser)
+  //         .collection(collectionEventName)
+  //         .doc(eventDocId)
+  //         .set(updatedEvent.toJson(), SetOptions(merge: true));
+
+  //     return Right(updatedEvent);
+  //   } catch (e) {
+  //     log('Error updating event: $e');
+  //     return Left(ServerFailure('Failed to update event: $e'));
+  //   }
+  }
 }

@@ -7,7 +7,7 @@ class DeleteEventUsecase {
     final EventRepository eventRepository;
 
   DeleteEventUsecase({required this.eventRepository});
-Future<Either<Failure, Unit>> call(EventEntity deletedEvent) async{
-  return eventRepository.deleteEvent(deletedEvent: deletedEvent );
+Future<Either<Failure, Unit>> call(EventEntity? deletedEvent) async{
+  return eventRepository.deleteEvent(deletedEvent: deletedEvent! );
 }
 }
