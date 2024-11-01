@@ -49,12 +49,13 @@ String _colorToString(Color? color) {
       final String statusColor = _colorToString(selectedColor);
       log(' color $statusColor ++++++++ +++ +++++ $selectedColor');
       final EventEntity event = EventEntity(
+        
         user: null,
         title: _titleController.text,
         description: _descriptionController.text,
         statusColor:_colorToString(selectedColor),
         date: _dateController.text,
-        type: null,
+        type: '',
       );
 
       // Trigger event creation

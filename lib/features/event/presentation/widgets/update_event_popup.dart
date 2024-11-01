@@ -9,7 +9,7 @@ Future<bool> showUpdatePopup(
   TextEditingController typeController =
       TextEditingController(text: event.type);
   
-  Color updatedColor = event.statusColor; // Track the selected color
+  Color updatedColor = Colors.red;//          event.statusColor; // Track the selected color
 
   return await showDialog<bool>(
         context: context,

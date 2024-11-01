@@ -19,7 +19,8 @@ final EventRemoteDatasourceImpl remoteDataSource;
     if (await networkInfo.isConnected) {
       try {
         final EventModel eventModel = EventModel(
-          user: event!.user, 
+          id: event!.id,
+          user: event.user, 
           title: event.title, 
          description : event.description, 
           statusColor: event.statusColor, 
@@ -41,13 +42,13 @@ Future<Either<Failure, List<EventEntity>>> getAllEvents() async {
   if (await networkInfo.isConnected) {
     try {
       final eventsResult = await remoteDataSource.getAllEvents();
-      // Check if the result is a success or failure
       return eventsResult.fold(
-        (failure) => Left(failure), // Return the failure if it exists
+        (failure) => Left(failure), 
         (eventsModelList) {
           // Map each EventModel to an EventEntity
           final eventsEntityList = eventsModelList.map((eventModel) {
             return EventEntity(
+              id:eventModel.id ,
               user: eventModel.user,
               title: eventModel.title,
               description: eventModel.description,
@@ -56,7 +57,6 @@ Future<Either<Failure, List<EventEntity>>> getAllEvents() async {
               date: eventModel.date,
             );
           }).toList();
-
           return Right(eventsEntityList);
         },
       );
@@ -68,13 +68,36 @@ Future<Either<Failure, List<EventEntity>>> getAllEvents() async {
   }
 }
 
-
+//*************************  delete event ********* */
 
   @override
-  Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) {
-    // TODO: implement deleteEvent
-    throw UnimplementedError();
+   
+Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) async {
+  if (await networkInfo.isConnected) {
+    try {
+      // Convert EventEntity to EventModel for deletion
+      final EventModel eventModel = EventModel(
+        id: deletedEvent!.id,
+        user: deletedEvent!.user,
+        title: deletedEvent.title,
+        description: deletedEvent.description,
+        statusColor: deletedEvent.statusColor,
+        type: deletedEvent.type,
+        date: deletedEvent.date,
+      );
+
+      // Call the remote data source to delete the event
+      await remoteDataSource.deleteEvent(deletedEvent: eventModel);
+
+      return const Right(unit);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  } else {
+    return Left(OfflineFailure());
   }
+}
+
 
 
 
