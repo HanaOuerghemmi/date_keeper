@@ -8,8 +8,7 @@ import 'package:date_keeper/features/character/presentation/cubit/get_all_charac
 import 'package:date_keeper/features/event/presentation/bloc/create_event_cubit/create_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/delete_event_cubit/delete_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
-import 'package:date_keeper/features/home/home_screen.dart';
-import 'package:date_keeper/features/onbording/splash_screen.dart';
+import 'package:date_keeper/features/event/presentation/bloc/update_event_cubit/update_event_cubit.dart';
 import 'package:date_keeper/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +52,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<CreateEventCubit>()),
         BlocProvider(create: (_) => di.sl<GetallEventCubit>()),
         BlocProvider(create: (_) => di.sl<DeleteEventCubit>()),
+        BlocProvider(create: (_) => di.sl<UpdateEventCubit>()),
 
 
       ],

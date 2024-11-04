@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 
-Future<bool> showUpdatePopup(
-    BuildContext context,  event, int index) async {
+Future<EventEntity?> showUpdatePopup(
+    BuildContext context, EventEntity event, int index) async {
+  // Initialize controllers with current event values
   TextEditingController titleController =
       TextEditingController(text: event.title);
   TextEditingController descriptionController =
       TextEditingController(text: event.description);
   TextEditingController typeController =
       TextEditingController(text: event.type);
-  
-  Color updatedColor = Colors.red;//          event.statusColor; // Track the selected color
 
-  return await showDialog<bool>(
-        context: context,
-        builder: (BuildContext context) {
+  Color updatedColor = Colors.red; // Track the selected color
+
+  return await showDialog<EventEntity>(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
           return AlertDialog(
             title: Text('Update Event'),
             content: Column(
@@ -39,7 +43,9 @@ Future<bool> showUpdatePopup(
                     DropdownMenuItem(value: Colors.red, child: Text("Red")),
                   ],
                   onChanged: (value) {
-                    updatedColor = value ?? Colors.green; // Track updated color
+                    setState(() {
+                      updatedColor = value ?? Colors.green; // Update color
+                    });
                   },
                 ),
               ],
@@ -47,20 +53,31 @@ Future<bool> showUpdatePopup(
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(false); // Cancel
+                  Navigator.of(context).pop(null); // Cancel without updating
                 },
                 child: Text('Cancel'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(true); // Confirm and close
+                  // Create a new EventEntity with updated details
+                  final updatedEvent = EventEntity(
+                    user: event.user,
+                    date: event.date,
+                    id: event.id,
+                    title: titleController.text,
+                    description: descriptionController.text,
+                    type: typeController.text,
+                    statusColor: 'red',
+                    // Add other fields if needed
+                  );
+                  Navigator.of(context).pop(updatedEvent); // Confirm update
                 },
                 child: Text('Update'),
               ),
             ],
           );
         },
-      ) ??
-      false;
+      );
+    },
+  );
 }
-

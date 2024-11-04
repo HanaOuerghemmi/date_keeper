@@ -85,7 +85,6 @@ Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) async {
         type: deletedEvent.type,
         date: deletedEvent.date,
       );
-
       // Call the remote data source to delete the event
       await remoteDataSource.deleteEvent(deletedEvent: eventModel);
 
@@ -98,13 +97,27 @@ Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) async {
   }
 }
 
-
-
-
   @override
-  Future<Either<Failure, EventEntity>> updateEvent({EventEntity? updatedEvent}) {
-    // TODO: implement updateEvent
-    throw UnimplementedError();
+  Future<Either<Failure, EventEntity>> updateEvent({EventEntity? updatedEvent}) async{
+    
+    if (await networkInfo.isConnected) {
+      try {
+        final EventModel eventModel = EventModel(
+          id: updatedEvent!.id,
+          user: updatedEvent.user, 
+          title: updatedEvent.title, 
+         description : updatedEvent.description, 
+          statusColor: updatedEvent.statusColor, 
+          type: updatedEvent.type, date: updatedEvent.date);
+        await remoteDataSource.updateEvent(updatedEvent: eventModel);
+        return right(updatedEvent);
+      } on ServerException {
+        return left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+
   }
 
 }
