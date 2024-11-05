@@ -1,5 +1,6 @@
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/core/rooting/app_rooting.dart';
+import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/pages/add_event_screen.dart';
@@ -19,6 +20,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+   void initState() {
+    context.read<GetAllCharacterCubit>().getAllCharacters();
+  }
   void _refreshEventList() {
     context.read<GetallEventCubit>().getAllEvents();
   }

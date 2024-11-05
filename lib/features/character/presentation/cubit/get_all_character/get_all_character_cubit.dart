@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:date_keeper/core/error/failures.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:date_keeper/features/character/domain/usecases/get_all_characters_of_user.dart';
@@ -15,48 +14,37 @@ part 'get_all_character_state.dart';
 
 class GetAllCharacterCubit extends Cubit<GetAllCharacterState> {
   final GetAllCaractersOfUserUsercase getAllCaractersOfUserUsercase;
-  late final Stream<Either<Failure, List<CharacterEntity>>> _characterStream;
+
   GetAllCharacterCubit({
     required this.getAllCaractersOfUserUsercase,
-  }) : super(GetAllCharacterState.initial()) {
-    _init();
-  }
+  }) : super(GetAllCharacterState.initial());
 
-  void _init() {
-    emit(GetAllCharacterState.loading());
-    _characterStream = getAllCaractersOfUserUsercase();
+  void getAllCharacters() {
+    emit(const GetAllCharacterState.loading());
 
-    _characterStream.listen((result) {
-      result.fold(
-        (failure) => emit(const GetAllCharacterState.error()),
-        (listCharacters) =>
-            emit(GetAllCharacterState.loaded(listCharacters: listCharacters)),
+    try {
+      final characterStream = getAllCaractersOfUserUsercase();
+      characterStream.listen(
+        (result) {
+          result.fold(
+            (failure) => emit(const GetAllCharacterState.error()),
+            (listCharacters) {
+              log("Characters loaded: $listCharacters");
+              emit(GetAllCharacterState.loaded(listCharacters: listCharacters));
+            },
+          );
+        },
+        onError: (_) {
+          emit(const GetAllCharacterState.error());
+        },
       );
-    });
+    } catch (e) {
+      emit(const GetAllCharacterState.error());
+    }
   }
 
   @override
   Future<void> close() {
     return super.close();
-  }
-
-  Stream<void> getAllCharacters() async* {
-    emit(const GetAllCharacterState.loading());
-    try {
-      final streamResponse = getAllCaractersOfUserUsercase();
-      streamResponse.listen(
-        (response) {
-          response.fold(
-            (failure) => emit(const GetAllCharacterState.error()),
-            (listCharacters) {
-              log(listCharacters.toString() + "in cubit");
-              emit(GetAllCharacterState.loaded(listCharacters: listCharacters));
-            },
-          );
-        },
-      );
-    } catch (_) {
-      emit(const GetAllCharacterState.error());
-    }
   }
 }

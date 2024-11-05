@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
+import 'package:date_keeper/core/data/data_storage.dart';
+import 'package:date_keeper/core/error/failures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -21,24 +24,28 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
     required this.firebaseStorage,
   });
 
-  Stream<QuerySnapshot<Object?>>? streamGetAllUsers() {
-    final uidUser = auth.currentUser?.uid;
-    return firebaseFirestore
-        .collection(collectionUsersName)
-        .doc(uidUser)
-        .collection(collectionCharacterName)
-        .snapshots();
-  }
+  // Stream<QuerySnapshot<Object?>>? streamGetAllUsers() {
+  //   final uidUser = auth.currentUser?.uid;
+  //   return firebaseFirestore
+  //       .collection(collectionUsersName)
+  //       .doc(uidUser)
+  //       .collection(collectionCharacterName)
+  //       .snapshots();
+  // }
 
   @override
   Future<void> createCharacter(CharacterModel characterModel) async {
     final uidUser = auth.currentUser?.uid;
-log(' user id $uidUser');
+    final imageFile = File(characterModel.profilePicture!);
+    final imageUrl = await uploadImageToFirebase(imageFile);
+    final characterModelWithPict =
+        characterModel.copyWith(profilePicture: imageUrl);
+    log(' user id $uidUser');
     await firebaseFirestore
         .collection(collectionUsersName)
         .doc(uidUser)
         .collection(collectionCharacterName)
-        .add(characterModel.toJson());
+        .add(characterModelWithPict.toJson());
   }
 
   @override
@@ -49,8 +56,11 @@ log(' user id $uidUser');
 
   @override
   Stream<List<CharacterModel>> getAllCharactersOfUser() async* {
-    final uidUser = auth.currentUser?.uid;
-
+try{
+final uidUser = auth.currentUser?.uid;
+ if (uidUser == null) {
+        return;
+      }
     yield* firebaseFirestore
         .collection(collectionUsersName)
         .doc(uidUser)
@@ -59,6 +69,12 @@ log(' user id $uidUser');
         .map((querySnapshot) => querySnapshot.docs
             .map((doc) => CharacterModel.fromMap(doc.data(), doc.id))
             .toList());
+}catch (e) {
+      return;
+    }
+
+
+
 
     @override
     Future<CharacterModel> updateCharacter(CharacterModel characterModel) {
