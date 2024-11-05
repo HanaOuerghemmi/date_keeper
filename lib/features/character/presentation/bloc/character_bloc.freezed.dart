@@ -17,23 +17,19 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CharacterEvent {
   CharacterEntity get characterEntity => throw _privateConstructorUsedError;
-  File get fileImage => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CharacterEntity characterEntity, File fileImage)
-        createCharacter,
+    required TResult Function(CharacterEntity characterEntity) createCharacter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(CharacterEntity characterEntity, File fileImage)?
-        createCharacter,
+    TResult? Function(CharacterEntity characterEntity)? createCharacter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CharacterEntity characterEntity, File fileImage)?
-        createCharacter,
+    TResult Function(CharacterEntity characterEntity)? createCharacter,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -65,7 +61,7 @@ abstract class $CharacterEventCopyWith<$Res> {
           CharacterEvent value, $Res Function(CharacterEvent) then) =
       _$CharacterEventCopyWithImpl<$Res, CharacterEvent>;
   @useResult
-  $Res call({CharacterEntity characterEntity, File fileImage});
+  $Res call({CharacterEntity characterEntity});
 }
 
 /// @nodoc
@@ -82,17 +78,12 @@ class _$CharacterEventCopyWithImpl<$Res, $Val extends CharacterEvent>
   @override
   $Res call({
     Object? characterEntity = null,
-    Object? fileImage = null,
   }) {
     return _then(_value.copyWith(
       characterEntity: null == characterEntity
           ? _value.characterEntity
           : characterEntity // ignore: cast_nullable_to_non_nullable
               as CharacterEntity,
-      fileImage: null == fileImage
-          ? _value.fileImage
-          : fileImage // ignore: cast_nullable_to_non_nullable
-              as File,
     ) as $Val);
   }
 }
@@ -105,7 +96,7 @@ abstract class _$$CreateCharacterImplCopyWith<$Res>
       __$$CreateCharacterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({CharacterEntity characterEntity, File fileImage});
+  $Res call({CharacterEntity characterEntity});
 }
 
 /// @nodoc
@@ -120,17 +111,12 @@ class __$$CreateCharacterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? characterEntity = null,
-    Object? fileImage = null,
   }) {
     return _then(_$CreateCharacterImpl(
       characterEntity: null == characterEntity
           ? _value.characterEntity
           : characterEntity // ignore: cast_nullable_to_non_nullable
               as CharacterEntity,
-      fileImage: null == fileImage
-          ? _value.fileImage
-          : fileImage // ignore: cast_nullable_to_non_nullable
-              as File,
     ));
   }
 }
@@ -138,17 +124,14 @@ class __$$CreateCharacterImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$CreateCharacterImpl implements _CreateCharacter {
-  const _$CreateCharacterImpl(
-      {required this.characterEntity, required this.fileImage});
+  const _$CreateCharacterImpl({required this.characterEntity});
 
   @override
   final CharacterEntity characterEntity;
-  @override
-  final File fileImage;
 
   @override
   String toString() {
-    return 'CharacterEvent.createCharacter(characterEntity: $characterEntity, fileImage: $fileImage)';
+    return 'CharacterEvent.createCharacter(characterEntity: $characterEntity)';
   }
 
   @override
@@ -157,13 +140,11 @@ class _$CreateCharacterImpl implements _CreateCharacter {
         (other.runtimeType == runtimeType &&
             other is _$CreateCharacterImpl &&
             (identical(other.characterEntity, characterEntity) ||
-                other.characterEntity == characterEntity) &&
-            (identical(other.fileImage, fileImage) ||
-                other.fileImage == fileImage));
+                other.characterEntity == characterEntity));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, characterEntity, fileImage);
+  int get hashCode => Object.hash(runtimeType, characterEntity);
 
   @JsonKey(ignore: true)
   @override
@@ -175,30 +156,27 @@ class _$CreateCharacterImpl implements _CreateCharacter {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CharacterEntity characterEntity, File fileImage)
-        createCharacter,
+    required TResult Function(CharacterEntity characterEntity) createCharacter,
   }) {
-    return createCharacter(characterEntity, fileImage);
+    return createCharacter(characterEntity);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(CharacterEntity characterEntity, File fileImage)?
-        createCharacter,
+    TResult? Function(CharacterEntity characterEntity)? createCharacter,
   }) {
-    return createCharacter?.call(characterEntity, fileImage);
+    return createCharacter?.call(characterEntity);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CharacterEntity characterEntity, File fileImage)?
-        createCharacter,
+    TResult Function(CharacterEntity characterEntity)? createCharacter,
     required TResult orElse(),
   }) {
     if (createCharacter != null) {
-      return createCharacter(characterEntity, fileImage);
+      return createCharacter(characterEntity);
     }
     return orElse();
   }
@@ -234,13 +212,10 @@ class _$CreateCharacterImpl implements _CreateCharacter {
 
 abstract class _CreateCharacter implements CharacterEvent {
   const factory _CreateCharacter(
-      {required final CharacterEntity characterEntity,
-      required final File fileImage}) = _$CreateCharacterImpl;
+      {required final CharacterEntity characterEntity}) = _$CreateCharacterImpl;
 
   @override
   CharacterEntity get characterEntity;
-  @override
-  File get fileImage;
   @override
   @JsonKey(ignore: true)
   _$$CreateCharacterImplCopyWith<_$CreateCharacterImpl> get copyWith =>
