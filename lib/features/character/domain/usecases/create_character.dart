@@ -16,27 +16,29 @@ class CreateCaracterUsercase {
 
   Future<Either<Failure, Unit>> call(
       CharacterEntity characterEntity, File imageFile) async {
+
+        return await characterRepository.createCharacter(characterEntity);
     //! this is i refactor ....
     // First, upload the image and handle errors
-    final imageUploadResult =
-        await characterRepository.uploadCharacterImage(imageFile);
+  //  final imageUploadResult =
+   //     await characterRepository.uploadCharacterImage(imageFile);
 
     // Handle failure from image upload
-    return imageUploadResult.fold(
-      (failure) => Left(failure), // Return image upload failure
-      (imageUrl) async {
-        // Proceed with character creation
-        final newCharacter = characterEntity.copyWith(profilePicture: imageUrl);
-        log(newCharacter.profilePicture.toString());
-        // Save the character and handle errors
-        final saveResult =
-            await characterRepository.createCharacter(newCharacter);
+   // return imageUploadResult.fold(
+      // (failure) => Left(failure), // Return image upload failure
+      // (imageUrl) async {
+      //   // Proceed with character creation
+      //   final newCharacter = characterEntity.copyWith(profilePicture: imageUrl);
+      //   log(newCharacter.profilePicture.toString());
+      //   // Save the character and handle errors
+      //   final saveResult =
+      //       await characterRepository.createCharacter(newCharacter);
 
-        return saveResult.fold(
-          (failure) => Left(failure), // Return save failure
-          (_) => Right(unit), // Return success
-        );
-      },
-    );
+      //   return saveResult.fold(
+      //     (failure) => Left(failure), // Return save failure
+      //     (_) => Right(unit), // Return success
+      //   );
+      // },
+  // );
   }
 }

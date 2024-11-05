@@ -7,6 +7,6 @@ import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 abstract class  EventRemotedatasource   {
     Future<Either<Failure, List<EventModel>>> getAllEvents();
   Future<Either<Failure, EventModel>> createEvent({EventModel event});
-  Future<Either<Failure, EventEntity>> updateEvent({EventEntity updatedEvent});
+  Future<Either<Failure, EventEntity>> updateEvent({EventModel updatedEvent});
   Future<Either<Failure, Unit>> deleteEvent({EventEntity deletedEvent});
 }

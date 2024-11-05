@@ -22,6 +22,7 @@ class CharacterRepositoryImpl implements CharacterRepository {
   Future<Either<Failure, Unit>> createCharacter(
       CharacterEntity characterEntity) async {
     CharacterModel characterModel = CharacterModel(
+      id: characterEntity.id,
       name: characterEntity.name,
       relationship: characterEntity.relationship,
       profilePicture: characterEntity.profilePicture,

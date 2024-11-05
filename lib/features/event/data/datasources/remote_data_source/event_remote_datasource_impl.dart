@@ -105,35 +105,34 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource {
   }
 
   @override
-  Future<Either<Failure, EventEntity>> updateEvent({EventEntity? updatedEvent}) async {
-        throw UnimplementedError();
+  Future<Either<Failure, EventEntity>> updateEvent({EventModel? updatedEvent}) async {
 
-  //   if (updatedEvent == null) {
-  //     return Left(ServerFailure('Updated event cannot be null'));
-  //   }
+     if (updatedEvent == null) {
+       return Left(ServerFailure('Updated event cannot be null'));
+     }
 
-  //   try {
-  //     final uidUser = auth.currentUser?.uid;
-  //     if (uidUser == null) {
-  //       return Left(OfflineFailure('User not logged in'));
-  //     }
+     try {
+       final uidUser = auth.currentUser?.uid;
+       if (uidUser == null) {
+         return Left(OfflineFailure('User not logged in'));
+       }
 
-  //     final eventDocId = updatedEvent.id; // Ensure the updatedEvent has an ID
-  //     if (eventDocId == null) {
-  //       return Left(ServerFailure('Invalid event ID'));
-  //     }
+       final eventDocId = updatedEvent.id; // Ensure the updatedEvent has an ID
+       if (eventDocId == null) {
+         return Left(ServerFailure('Invalid event ID'));
+       }
 
-  //     await firebaseFirestore
-  //         .collection(collectionUsersName)
-  //         .doc(uidUser)
-  //         .collection(collectionEventName)
-  //         .doc(eventDocId)
-  //         .set(updatedEvent.toJson(), SetOptions(merge: true));
+       await firebaseFirestore
+           .collection(collectionUsersName)
+           .doc(uidUser)
+           .collection(collectionEventName)
+           .doc(eventDocId)
+           .set(updatedEvent.toJson(), SetOptions(merge: true));
 
-  //     return Right(updatedEvent);
-  //   } catch (e) {
-  //     log('Error updating event: $e');
-  //     return Left(ServerFailure('Failed to update event: $e'));
-  //   }
+       return Right(updatedEvent);
+     } catch (e) {
+       log('Error updating event: $e');
+       return Left(ServerFailure('Failed to update event: $e'));
+     }
   }
 }

@@ -4,9 +4,11 @@ import 'package:date_keeper/features/event/domain/repositories/event_repository.
 import 'package:date_keeper/features/event/domain/usecases/creat_event_usescase.dart';
 import 'package:date_keeper/features/event/domain/usecases/delte_event_usecase.dart';
 import 'package:date_keeper/features/event/domain/usecases/getall_event_usecase.dart';
+import 'package:date_keeper/features/event/domain/usecases/update_event_usecas.dart';
 import 'package:date_keeper/features/event/presentation/bloc/create_event_cubit/create_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/delete_event_cubit/delete_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
+import 'package:date_keeper/features/event/presentation/bloc/update_event_cubit/update_event_cubit.dart';
 import 'package:date_keeper/main_injection_container.dart';
 
 Future<void> eventInjectionContainer() async {
@@ -20,6 +22,10 @@ Future<void> eventInjectionContainer() async {
   sl.registerLazySingleton<DeleteEventCubit>(() => DeleteEventCubit(
         deleteEventUsecase: sl(),
       ));
+  sl.registerLazySingleton<UpdateEventCubit>(() => UpdateEventCubit(
+        updateEventUsecase: sl(),
+      ));
+
 //************************** uses cases injection  ***************/
 
   sl.registerLazySingleton<CreatEventUsescase>(
@@ -29,6 +35,8 @@ Future<void> eventInjectionContainer() async {
       () => GetAllEventUsecase(eventRepository: sl()));
   sl.registerLazySingleton<DeleteEventUsecase>(
       () => DeleteEventUsecase(eventRepository: sl()));
+  sl.registerLazySingleton<UpdateEventUsecase>(
+      () => UpdateEventUsecase(eventRepository: sl()));
 
 //************************** repository injection  *************/
   sl.registerLazySingleton<EventRepository>(

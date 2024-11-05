@@ -1,5 +1,4 @@
 import 'package:date_keeper/core/core.dart';
-import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
   String relationship = '';
   String description = '';
   File? _image;
+  bool _isSubmitting = false;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -32,21 +32,51 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
 
   void _submitForm(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      context.read<CharacterBloc>().add(CharacterEvent.createCharacter(
+      setState(() {
+        _isSubmitting = true;
+      });
+
+      context.read<CharacterBloc>().add(
+        CharacterEvent.createCharacter(
           fileImage: _image!,
           characterEntity: CharacterEntity(
-              name: name, relationship: relationship, profilePicture: '')));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Character created successfully!')),
+            name: name,
+            relationship: relationship,
+            profilePicture: _image!.path,
+          ),
+        ),
       );
-      Navigator.of(context).pop(); // Close the dialog after submission
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CharacterBloc, CharacterState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        state.when(
+          initial: () => {},
+          loading: () => setState(() {
+            _isSubmitting = true;
+          }),
+          loaded: () {
+            setState(() {
+              _isSubmitting = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Character created successfully!')),
+            );
+            Navigator.of(context).pop(); // Close the dialog after success
+          },
+          error: (error) {
+            setState(() {
+              _isSubmitting = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to create character: $error')),
+            );
+          },
+        );
+      },
       builder: (context, state) {
         return AlertDialog(
           title: Text('Create Character'),
@@ -56,18 +86,16 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min, // Important for dialog size
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Image Picker
                     GestureDetector(
                       onTap: _pickImage,
                       child: _image == null
                           ? Container(
                               decoration: BoxDecoration(
                                 color: greyColor.withOpacity(0.4),
-                                shape: BoxShape
-                                    .circle, // Make the container circular
+                                shape: BoxShape.circle,
                               ),
                               height: 100,
                               width: double.infinity,
@@ -80,7 +108,6 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
                           : Image.file(_image!, height: 150, fit: BoxFit.cover),
                     ),
                     mediumPaddingVert,
-                    // Name TextField
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Name'),
                       onChanged: (value) {
@@ -95,8 +122,6 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
                         return null;
                       },
                     ),
-
-                    // Relationship TextField
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Relationship'),
                       onChanged: (value) {
@@ -105,8 +130,6 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
                         });
                       },
                     ),
-
-                    // Description TextField
                     TextFormField(
                       decoration: InputDecoration(labelText: 'Description'),
                       maxLines: 3,
@@ -116,17 +139,22 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
                         });
                       },
                     ),
-
                     SizedBox(height: 16),
-
                     SizedBox(height: 24),
-
-                    // Submit Button
                     Align(
                       alignment: Alignment.bottomRight,
                       child: ElevatedButton(
-                        onPressed: () => _submitForm(context),
-                        child: Text('Submit'),
+                        onPressed: _isSubmitting ? null : () => _submitForm(context),
+                        child: _isSubmitting
+                            ? SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text('Submit'),
                       ),
                     ),
                   ],
@@ -140,7 +168,6 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
   }
 }
 
-// Method to show the dialog
 void showCreateCharacterDialog(BuildContext context) {
   showDialog(
     context: context,

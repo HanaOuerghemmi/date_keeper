@@ -54,4 +54,19 @@ factory CharacterModel.fromJson(Map<String, dynamic> json) {
       additionalInfo: additionalInfo,
     );
   }
+
+  CharacterModel copyWith({
+    String? name,
+    String? relationship,
+    String? profilePicture,
+    String? additionalInfo,
+  }) {
+    return CharacterModel(
+      name: name ?? this.name,
+      relationship: relationship ?? this.relationship,
+      profilePicture: profilePicture ?? this.profilePicture,
+      additionalInfo: additionalInfo ?? this.additionalInfo
+    );
+  }
+
 }

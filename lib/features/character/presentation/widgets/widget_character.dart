@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:date_keeper/core/core.dart';
+import 'package:date_keeper/core/rooting/app_rooting.dart';
 
 import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
@@ -18,10 +19,13 @@ class WidgetCharacter extends StatefulWidget {
 class _WidgetCharacterState extends State<WidgetCharacter> {
   @override
   void initState() {
-    context.read<GetAllCharacterCubit>().getAllCharacters();
     super.initState();
+    _fetchCharcter();
   }
+void _fetchCharcter(){
+    context.read<GetAllCharacterCubit>().getAllCharacters();
 
+}
   @override
   Widget build(BuildContext context) {
     log('widget characters');
@@ -56,32 +60,44 @@ class _WidgetCharacterState extends State<WidgetCharacter> {
               //*****  list all charcter *************/
 
               Expanded(
-                child: BlocBuilder<GetAllCharacterCubit, GetAllCharacterState>(
-                  builder: (context, state) {
-                    return state.when(
-                      initial: () =>
-                          const Center(child: Text("No users available.")),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      loaded: (characters) => characters.isEmpty
-                          ? const Center(child: Text("No users available."))
-                          : ListView.builder(
-                              itemCount: characters.length,
-                              itemBuilder: (context, index) {
-                                final character = characters[index];
-                                return CharcterItemWidget(
-                                  text: character.name ?? '',
-                                  image: Image.network(
-                                      character.profilePicture ?? ''),
-                                  onTap: () {},
-                                );
-                              },
-                            ),
-                      error: () => Center(child: Text('error')),
-                    );
-                  },
-                ),
+  child: BlocConsumer<GetAllCharacterCubit, GetAllCharacterState>(
+    listener: (context, state) {
+      state.maybeWhen(
+        error: () {},
+        orElse: () {},
+      );
+    },
+    builder: (context, state) {
+      return state.maybeWhen(
+        initial: () => const Center(child: Text("No users available.")),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        loaded: (characters) => characters.isEmpty
+            ? const Center(child: Text("No users available."))
+            : ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: characters.length,
+                itemBuilder: (context, index) {
+                  final character = characters[index];
+                  return CharcterItemWidget(
+                    text: character.name ?? '',
+                    image: Image.network(character.profilePicture ?? ''),
+                    onTap: () => navigateGoOption(
+                      context: context,
+                      routeName: '/charcter',
+                      params: {
+                        'name': character.name!,
+                        'image': character.profilePicture!,
+                      },
+                    ),
+                  );
+                },
               ),
+        orElse: () => Center(child: Text('Unexpected state')),
+      );
+    },
+  ),
+),
+
             ],
           ),
         ),
