@@ -32,7 +32,7 @@ void _fetchCharcter(){
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Container(
         width: MediaQuery.of(context).size.width,
-        height: 100,
+        height: 105,
         decoration: BoxDecoration(
           color: whiteColor,
           boxShadow: [
@@ -80,7 +80,21 @@ void _fetchCharcter(){
                   final character = characters[index];
                   return CharcterItemWidget(
                     text: character.name ?? '',
-                    image: Image.network(character.profilePicture ?? ''),
+                    image:
+                     Image.network(
+                  character.profilePicture!,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Icon(
+                    Icons.person,
+                    size: 50 * 0.6,
+                    color: Colors.grey,
+                  ),
+                ),
+              
+                    
+                    // character.profilePicture ?? '',
                     onTap: () => navigateGoOption(
                       context: context,
                       routeName: '/charcter',
@@ -110,77 +124,65 @@ class CharcterItemWidget extends StatelessWidget {
   final Function() onTap;
   final Widget image;
   final String text;
+    final double size;
+
 
   const CharcterItemWidget({
     super.key,
     required this.onTap,
     required this.image,
     required this.text,
+    this.size = 50.0,
+
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: 8.0), // Increased horizontal padding
+    return 
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
       child: GestureDetector(
         onTap: onTap,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 50,
-              height: 50,
+              width: size,
+              height: size,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: primaryColor,
-                  width: 2,
+                  color: lightColor,
+                  width: 3,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 6,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-              child: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: ClipOval(
-                  child: image,
-                ),
-              ),
+              child: ClipOval(
+                child: image)
             ),
-            smallPaddingVert,
+            const SizedBox(height: 8),
             Text(
               text,
-              style: textStyleSubtitle.copyWith(fontSize: 9),
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
               textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ],
         ),
       ),
     );
   }
-}
 
-final List<Map<String, dynamic>> characterList = [
-  {
-    'name': 'Character 1',
-    'image':
-        'https://img.freepik.com/photos-premium/homme-portant-lunettes-chemise-blanche-pouce-air_273179-14958.jpg?w=740',
-  },
-  {
-    'name': 'Character 2',
-    'image':
-        'https://img.freepik.com/photos-gratuite/portrait-jeune-femme-affaires-tenant-lunettes-main-fond-gris_23-2148029483.jpg?t=st=1729245116~exp=1729248716~hmac=9a04f29257e64fc59d2a807f4bcbf4c3d09517f3587ed2d3ec8aba870b99d7e6&w=740',
-  },
-  {
-    'name': 'Character 3',
-    'image':
-        'https://img.freepik.com/photos-premium/homme-portant-lunettes-chemise-blanche-pouce-air_273179-14958.jpg?w=740',
-  },
-  {
-    'name': 'Character 4',
-    'image':
-        'https://img.freepik.com/photos-premium/homme-portant-lunettes-chemise-blanche-pouce-air_273179-14958.jpg?w=740',
-  },
-  {
-    'name': 'Character 5',
-    'image':
-        'https://img.freepik.com/photos-premium/homme-portant-lunettes-chemise-blanche-pouce-air_273179-14958.jpg?w=740',
-  },
-];
+}

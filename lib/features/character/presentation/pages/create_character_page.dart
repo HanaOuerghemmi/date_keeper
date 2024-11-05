@@ -38,11 +38,11 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
 
       context.read<CharacterBloc>().add(
         CharacterEvent.createCharacter(
-          fileImage: _image!,
+          //fileImage: _image!,
           characterEntity: CharacterEntity(
             name: name,
             relationship: relationship,
-            profilePicture: _image!.path,
+            profilePicture: _image != null ? _image!.path : '',
           ),
         ),
       );

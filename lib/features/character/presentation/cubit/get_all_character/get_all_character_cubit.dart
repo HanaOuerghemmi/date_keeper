@@ -1,9 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
-import 'package:date_keeper/core/error/failures.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

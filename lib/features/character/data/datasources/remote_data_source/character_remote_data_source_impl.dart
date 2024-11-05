@@ -33,20 +33,29 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
   //       .snapshots();
   // }
 
-  @override
-  Future<void> createCharacter(CharacterModel characterModel) async {
-    final uidUser = auth.currentUser?.uid;
+ @override
+Future<void> createCharacter(CharacterModel characterModel) async {
+  final uidUser = auth.currentUser?.uid;
+
+  // Check if profilePicture is not empty or null
+  String imageUrl = '';
+  if (characterModel.profilePicture != null && characterModel.profilePicture!.isNotEmpty) {
     final imageFile = File(characterModel.profilePicture!);
-    final imageUrl = await uploadImageToFirebase(imageFile);
-    final characterModelWithPict =
-        characterModel.copyWith(profilePicture: imageUrl);
-    log(' user id $uidUser');
-    await firebaseFirestore
-        .collection(collectionUsersName)
-        .doc(uidUser)
-        .collection(collectionCharacterName)
-        .add(characterModelWithPict.toJson());
+    // Attempt to upload the image and get the URL
+    imageUrl = await uploadImageToFirebase(imageFile);
   }
+
+  // Create a new CharacterModel with the profile picture URL
+  final characterModelWithPict = characterModel.copyWith(profilePicture: imageUrl);
+
+  log('User ID: $uidUser');
+  await firebaseFirestore
+      .collection(collectionUsersName)
+      .doc(uidUser)
+      .collection(collectionCharacterName)
+      .add(characterModelWithPict.toJson());
+}
+
 
   @override
   Future<void> deleteCharacter() {

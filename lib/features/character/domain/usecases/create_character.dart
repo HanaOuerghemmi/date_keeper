@@ -15,7 +15,7 @@ class CreateCaracterUsercase {
   });
 
   Future<Either<Failure, Unit>> call(
-      CharacterEntity characterEntity, File imageFile) async {
+      CharacterEntity characterEntity,  ) async {
 
         return await characterRepository.createCharacter(characterEntity);
     //! this is i refactor ....
