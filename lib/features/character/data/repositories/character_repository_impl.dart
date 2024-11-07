@@ -41,9 +41,18 @@ class CharacterRepositoryImpl implements CharacterRepository {
   }
 
   @override
-  Future<Either<Failure, CharacterEntity>> deleteCharacter() {
-    // TODO: implement deleteCharacter
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> deleteCharacter(String charcterId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        // Call the remote data source to delete the character
+        await remoteDataSource.deleteCharacter(charcterId);
+        return const Right(unit);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
 
   @override
@@ -71,9 +80,26 @@ class CharacterRepositoryImpl implements CharacterRepository {
 
   @override
   Future<Either<Failure, CharacterEntity>> updateCharacter(
-      CharacterEntity characterEntity) {
-    // TODO: implement updateCharacter
-    throw UnimplementedError();
+      CharacterEntity characterEntity) async {
+    if (await networkInfo.isConnected) {
+      try {
+        // Convert CharacterEntity to CharacterModel
+        final CharacterModel characterModel = CharacterModel(
+            id: characterEntity.id,
+            name: characterEntity.name,
+            profilePicture: characterEntity.profilePicture,
+            relationship: characterEntity.relationship,
+            additionalInfo: characterEntity.additionalInfo);
+        // Call the remote data source to update the character
+        await remoteDataSource.updateCharacter(character: characterModel);
+        // Return the updated character entity
+        return Right(characterEntity);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
 
   @override

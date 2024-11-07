@@ -4,6 +4,7 @@ import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/main_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/sign_up_with_email_page.dart';
+import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/pages/character_screen.dart';
 import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
 import 'package:date_keeper/features/event/presentation/pages/add_event_screen.dart';
@@ -85,13 +86,11 @@ class AppRouter {
             name: 'charcter',
             builder: (context, state) {
               // Extract parameters using state.extra
-              final params = state.extra as Map<String, dynamic>;
-              final name = params['name'] as String;
-              final image = params['image'] as String;
-
+    final character = state.extra as CharacterEntity;
+        
               return CharacterScreen(
-                name: name,
-                image: image,
+                character: character,
+                
               );
             }),
         GoRoute(
@@ -117,7 +116,7 @@ void navigateGoOption({
   required BuildContext context,
   required String routeName,
   bool forgetHistory = false,
-  Map<String, String>? params,
+  Object? params,
 }) {
   if (forgetHistory) {
     // Clear the history and replace the current route with the new one

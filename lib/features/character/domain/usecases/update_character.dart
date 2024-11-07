@@ -6,9 +6,9 @@ import 'package:date_keeper/core/error/failures.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/domain/repositories/character_repository.dart';
 
-class UpadteCharacterUsercase {
+class UpdateCharacterUsercase {
   final CharacterRepository characterRepository;
-  UpadteCharacterUsercase({
+  UpdateCharacterUsercase({
     required this.characterRepository,
   });
 

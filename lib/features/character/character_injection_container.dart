@@ -2,9 +2,13 @@ import 'package:date_keeper/features/character/data/datasources/remote_data_sour
 import 'package:date_keeper/features/character/data/repositories/character_repository_impl.dart';
 import 'package:date_keeper/features/character/domain/repositories/character_repository.dart';
 import 'package:date_keeper/features/character/domain/usecases/create_character.dart';
+import 'package:date_keeper/features/character/domain/usecases/delete_character.dart';
 import 'package:date_keeper/features/character/domain/usecases/get_all_characters_of_user.dart';
+import 'package:date_keeper/features/character/domain/usecases/update_character.dart';
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
+import 'package:date_keeper/features/character/presentation/cubit/delete_character_cubit/delete_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
+import 'package:date_keeper/features/character/presentation/cubit/update_character_cubit/update_character_cubit.dart';
 import 'package:date_keeper/main_injection_container.dart';
 
 Future<void> characterInjectionContainer() async {
@@ -16,7 +20,12 @@ Future<void> characterInjectionContainer() async {
   sl.registerFactory<GetAllCharacterCubit>(() => GetAllCharacterCubit(
         getAllCaractersOfUserUsercase: sl(),
       ));
-
+  sl.registerFactory<DeleteCharacterCubit>(() => DeleteCharacterCubit(
+        deleteCharacterUseCase: sl(),
+      ));
+  sl.registerFactory<UpdateCharacterCubit>(() => UpdateCharacterCubit(
+        upadateCharacterUsercase: sl(),
+      ));
   // * USE CASES INJECTION
 
   sl.registerLazySingleton<CreateCaracterUsercase>(
@@ -24,6 +33,11 @@ Future<void> characterInjectionContainer() async {
 
   sl.registerLazySingleton<GetAllCaractersOfUserUsercase>(
       () => GetAllCaractersOfUserUsercase(characterRepository: sl()));
+ 
+ sl.registerLazySingleton<DeleteCharacterUseCase>(
+      () => DeleteCharacterUseCase(characterRepository: sl()));
+sl.registerLazySingleton<UpdateCharacterUsercase>(
+      () =>UpdateCharacterUsercase(characterRepository: sl()));
 
   // sl.registerLazySingleton<LogInUsercase>(
   //     () => LogInUsercase(authRepository: sl()));
