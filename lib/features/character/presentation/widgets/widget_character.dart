@@ -8,6 +8,7 @@ import 'package:date_keeper/features/character/presentation/pages/create_charact
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class WidgetCharacter extends StatefulWidget {
   const WidgetCharacter({super.key});
@@ -95,13 +96,13 @@ void _fetchCharcter(){
               
                     
                     // character.profilePicture ?? '',
-                    onTap: () => navigateGoOption(
-                      context: context,
-                      routeName: '/charcter',
-                      params: {
-                        'name': character.name!,
-                        'image': character.profilePicture!,
-                      },
+                    onTap: () => 
+
+                     navigateGoOption(
+                       context: context,
+                     routeName: '/charcter',
+                     
+                       params: character
                     ),
                   );
                 },

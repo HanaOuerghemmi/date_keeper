@@ -4,7 +4,9 @@ import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 // import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:date_keeper/features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
+import 'package:date_keeper/features/character/presentation/cubit/delete_character_cubit/delete_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
+import 'package:date_keeper/features/character/presentation/cubit/update_character_cubit/update_character_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/create_event_cubit/create_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/delete_event_cubit/delete_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
@@ -46,6 +48,8 @@ class MyApp extends StatelessWidget {
 
         
         BlocProvider(create: (_) => di.sl<CharacterBloc>()),
+        BlocProvider(create: (_) => di.sl<DeleteCharacterCubit>()),
+        BlocProvider(create: (_) => di.sl<UpdateCharacterCubit>()),
 
 
         //********* event bloc **********/
