@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:date_keeper/features/event/presentation/widgets/events_ittems.dart';
+import 'package:date_keeper/features/event/presentation/widgets/select_user_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:date_keeper/features/character/data/models/character_model.dart';
@@ -109,12 +110,19 @@ void showAddEventModal(BuildContext context, Function fetchEvents, List<Characte
                       'Select Users:',
                       style: TextStyle(fontSize: 16.0),
                     ),
-                    UserItemsSelector(
+                    
+                    SelectUserWidget(
                       users: users,
                       onUserSelected: (CharacterModel? user) {
                         selectedUser = user;
                       },
                     ),
+                    // UserItemsSelector(
+                    //   users: users,
+                    //   onUserSelected: (CharacterModel? user) {
+                    //     selectedUser = user;
+                    //   },
+                    // ),
                     SizedBox(height: 16),
                     state.maybeWhen(
                       loading: () => Center(child: CircularProgressIndicator()),

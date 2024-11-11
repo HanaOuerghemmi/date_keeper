@@ -1,0 +1,173 @@
+import 'dart:developer';
+
+import 'package:date_keeper/core/rooting/app_rooting.dart';
+import 'package:date_keeper/core/utils/colors.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
+import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
+import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
+import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class SelectUserWidget extends StatefulWidget {
+  //
+  final List<CharacterModel> users;
+  final Function(CharacterModel?) onUserSelected;
+  const SelectUserWidget({
+    Key? key,
+    required this.users,
+    required this.onUserSelected,
+  }) : super(key: key);
+
+  @override
+  State<SelectUserWidget> createState() => _SelectUserWidgetState();
+}
+
+class _SelectUserWidgetState extends State<SelectUserWidget> {
+  CharacterModel? _selectedUser;
+  @override
+  void initState() {
+    super.initState();
+    _fetchCharcter();
+  }
+
+  void _fetchCharcter() {
+    context.read<GetAllCharacterCubit>().getAllCharacters();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    log('widget characters');
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height: 105,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          boxShadow: [
+            BoxShadow(
+              color: black.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: BlocConsumer<GetAllCharacterCubit, GetAllCharacterState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                      error: () {},
+                      orElse: () {},
+                    );
+                  },
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      initial: () =>
+                          const Center(child: Text("No users available.")),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      loaded: (characters) => characters.isEmpty
+                          ? const Center(child: Text("No users available."))
+                          : ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: characters.length,
+                              itemBuilder: (context, index) {
+                                final character = characters[index];
+                                //! refactor code ........
+                                return 
+                                // character == _selectedUser
+                                //     ? CharcterItemWidget(
+                                //         text: character.name ?? '',
+                                //         image: Image.network(
+                                //           character.profilePicture!,
+                                //           width: 50,
+                                //           height: 50,
+                                //           fit: BoxFit.cover,
+                                //           errorBuilder:
+                                //               (context, error, stackTrace) =>
+                                //                   Icon(
+                                //             Icons.person,
+                                //             size: 50 * 0.6,
+                                //             color: Colors.grey,
+                                //           ),
+                                //         ),
+                                //         onTap: () {
+                                //           setState(() {
+                                //             _selectedUser = character;
+                                //             widget.onUserSelected(character);
+                                //             if (character != null) {
+                                //               log('Selected user: ${character.name}');
+                                //             } else {
+                                //               log('No user selected');
+                                //             }
+                                //           });
+                                //         })
+                                //     :
+                                     Stack(
+                                        alignment: AlignmentDirectional.topCenter,
+                                        children: [
+                                          CharcterItemWidget(
+                                              text: character.name ?? '',
+                                              image: Image.network(
+                                                character.profilePicture!,
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    Icon(
+                                                  Icons.person,
+                                                  size: 50 * 0.6,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  if(_selectedUser == null || _selectedUser != character){
+                                                     _selectedUser = character;
+                                                  widget.onUserSelected(
+                                                      character);
+                                                  if (character != null) {
+                                                    log('Selected user: ${character.name}');
+                                                  } else {
+                                                    _selectedUser =null;
+                                                    log('No user selected');
+                                                  }
+
+                                                  }else if(_selectedUser == character){
+                                                     _selectedUser = null;
+                                                  widget.onUserSelected(
+                                                      null);
+
+                                                  }
+                                                 
+                                                });
+                                              }),
+                                           if (character == _selectedUser)
+                                            Icon(
+                                              Icons.abc,
+                                              color: black,
+                                            ),
+                                        ],
+                                      );
+                              },
+                            ),
+                      orElse: () => Center(child: Text('Unexpected state')),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ]);
+  }
+}
