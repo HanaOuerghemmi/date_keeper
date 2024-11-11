@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 
 import 'package:date_keeper/core/error/failures.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/domain/repositories/character_repository.dart';
 
@@ -15,7 +16,7 @@ class CreateCaracterUsercase {
   });
 
   Future<Either<Failure, Unit>> call(
-      CharacterEntity characterEntity,  ) async {
+      CharacterModel characterEntity,  ) async {
 
         return await characterRepository.createCharacter(characterEntity);
     //! this is i refactor ....

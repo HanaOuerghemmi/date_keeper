@@ -68,5 +68,11 @@ factory CharacterModel.fromJson(Map<String, dynamic> json) {
       additionalInfo: additionalInfo ?? this.additionalInfo
     );
   }
-
+ factory CharacterModel.fromEntity(CharacterEntity entity) {
+    return CharacterModel(
+      id: entity.id,
+      name: entity.name,
+      profilePicture: entity.profilePicture,
+    );
+  }
 }

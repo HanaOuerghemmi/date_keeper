@@ -35,10 +35,17 @@ class _EventCardState extends State<EventCard> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundImage: NetworkImage(''), // Event picture
-                ),
+            widget.event.user == null
+    ? SizedBox.shrink()
+    : Column(
+      children: [
+        CircleAvatar(
+            radius: 24,
+            backgroundImage: NetworkImage(widget.event.user!.profilePicture!), // Event picture
+          ),
+          Text(widget.event.user!.name!),
+      ],
+    ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(

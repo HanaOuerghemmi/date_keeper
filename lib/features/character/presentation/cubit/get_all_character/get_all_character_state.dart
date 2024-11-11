@@ -5,6 +5,6 @@ class GetAllCharacterState with _$GetAllCharacterState {
   const factory GetAllCharacterState.initial() = _Initial;
   const factory GetAllCharacterState.loading() = _Loading;
   const factory GetAllCharacterState.loaded(
-      {required List<CharacterEntity> listCharacters}) = _Loaded;
+      {required List<CharacterModel> listCharacters}) = _Loaded;
   const factory GetAllCharacterState.error() = _Error;
 }

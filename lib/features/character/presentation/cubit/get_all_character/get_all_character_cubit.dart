@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

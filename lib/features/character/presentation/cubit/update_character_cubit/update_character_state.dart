@@ -4,7 +4,7 @@ part of 'update_character_cubit.dart';
 class UpdateCharacterState with _$UpdateCharacterState {
   const factory UpdateCharacterState.initial() = _Initial;
    const factory UpdateCharacterState.loading() = _Loading;
-  const factory UpdateCharacterState.success({required CharacterEntity character})  = _Sucess;
+  const factory UpdateCharacterState.success({required CharacterModel character})  = _Sucess;
   const factory UpdateCharacterState.error({required String message}) = _Error;
 
 }

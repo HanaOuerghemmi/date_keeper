@@ -1,58 +1,34 @@
 import 'dart:developer';
-import 'package:date_keeper/features/event/domain/usecases/creat_event_usescase.dart';
 import 'package:date_keeper/features/event/presentation/widgets/events_ittems.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:date_keeper/core/core.dart';
-import 'package:date_keeper/features/auth/domain/entities/user_entity.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 import 'package:date_keeper/features/event/presentation/bloc/create_event_cubit/create_event_cubit.dart';
 
-void showAddEventModal(BuildContext context, Function fetchEvents) {
+void showAddEventModal(BuildContext context, Function fetchEvents, List<CharacterModel> users) {
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers for input fields
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  
-  Color? selectedColor;
-  UserEntity? _selectedUser;
+    final TextEditingController selectedColor = TextEditingController();
 
-  // Static list of users for selection
-  final List<UserEntity> users = [
-    UserEntity(username: 'Alice', profilePictureUrl: 'https://i.pravatar.cc/150?img=1'),
-    UserEntity(username: 'Bob', profilePictureUrl: 'https://i.pravatar.cc/150?img=2'),
-    UserEntity(username: 'Charlie', profilePictureUrl: 'https://i.pravatar.cc/150?img=3'),
-  ];
+  CharacterModel? selectedUser;
 
-  String _colorToString(Color? color) {
-    switch (color?.value) {
-      case 0xFFF44336:
-        return "Red";
-      case 0xFFFFEB3B:
-        return "Yellow";
-      case 0xFF4CAF50:
-        return "Green";
-      default:
-        return "Unknown Color";
-    }
-  }
 
-  // Method to submit event
   void submitEvent(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      final String statusColor = _colorToString(selectedColor);
+     
       final EventEntity event = EventEntity(
-        user: null,
+        user: selectedUser,
         title: _titleController.text,
         description: _descriptionController.text,
-        statusColor: statusColor,
+        statusColor: selectedColor.text,
         date: _dateController.text,
         type: '',
       );
 
-      // Trigger event creation
       context.read<CreateEventCubit>().createEvent(event);
     }
   }
@@ -66,16 +42,13 @@ void showAddEventModal(BuildContext context, Function fetchEvents) {
           state.maybeWhen(
             loading: () {},
             success: (_) {
-              // Close modal on success
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Event added successfully')),
               );
-              // Fetch events to refresh list after adding
               fetchEvents();
             },
             error: (message) {
-              // Show error message
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message)),
               );
@@ -125,22 +98,30 @@ void showAddEventModal(BuildContext context, Function fetchEvents) {
                           : null,
                     ),
                     DateItemSelector(dateController: _dateController),
-                    mediumPaddingVert,
-                    const Text(
+                    SizedBox(height: 16),
+                    Text(
                       'Choose a Color:',
                       style: TextStyle(fontSize: 16.0),
                     ),
-                    StatusItemSelector(selectedColor: selectedColor),
-                    const Text(
+                    StatusItemSelector(selectedColorText: selectedColor ),
+                    SizedBox(height: 16),
+                    Text(
                       'Select Users:',
                       style: TextStyle(fontSize: 16.0),
                     ),
-                    UserItemsSelector(selectedUser: _selectedUser, users: users),
-                    smallPaddingVert,
+                    UserItemsSelector(
+                      users: users,
+                      onUserSelected: (CharacterModel? user) {
+                        selectedUser = user;
+                      },
+                    ),
+                    SizedBox(height: 16),
                     state.maybeWhen(
                       loading: () => Center(child: CircularProgressIndicator()),
                       orElse: () => ElevatedButton(
-                        onPressed: () => submitEvent(context),
+                        onPressed: () {
+                          submitEvent(context);
+                        },
                         child: Text('Submit'),
                       ),
                     ),
@@ -153,4 +134,57 @@ void showAddEventModal(BuildContext context, Function fetchEvents) {
       );
     },
   );
+}
+
+class UserItemsSelector extends StatefulWidget {
+  final List<CharacterModel> users;
+  final Function(CharacterModel?) onUserSelected;
+
+  UserItemsSelector({
+    Key? key,
+    required this.users,
+    required this.onUserSelected,
+  }) : super(key: key);
+
+  @override
+  State<UserItemsSelector> createState() => _UserItemsSelectorState();
+}
+
+class _UserItemsSelectorState extends State<UserItemsSelector> {
+  CharacterModel? _selectedUser;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<CharacterModel>(
+      value: _selectedUser,
+      hint: Text('Select a user'),
+      isExpanded: true,
+      onChanged: (CharacterModel? newValue) {
+        setState(() {
+          _selectedUser = newValue;
+          widget.onUserSelected(newValue);
+          if (newValue != null) {
+            log('Selected user: ${newValue.name}');
+          } else {
+            log('No user selected');
+          }
+        });
+      },
+      items: widget.users.map((CharacterModel user) {
+        return DropdownMenuItem<CharacterModel>(
+          value: user,
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(user.profilePicture ?? ''),
+                radius: 16,
+              ),
+              SizedBox(width: 10),
+              Text(user.name ?? 'Unknown'),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
 }

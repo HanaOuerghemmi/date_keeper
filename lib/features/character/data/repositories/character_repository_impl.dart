@@ -20,17 +20,17 @@ class CharacterRepositoryImpl implements CharacterRepository {
   });
   @override
   Future<Either<Failure, Unit>> createCharacter(
-      CharacterEntity characterEntity) async {
-    CharacterModel characterModel = CharacterModel(
-      id: characterEntity.id,
-      name: characterEntity.name,
-      relationship: characterEntity.relationship,
-      profilePicture: characterEntity.profilePicture,
-      additionalInfo: characterEntity.additionalInfo,
-    );
+      CharacterModel characterEntity) async {
+    // CharacterModel characterModel = CharacterModel(
+    //   id: characterEntity.id,
+    //   name: characterEntity.name,
+    //   relationship: characterEntity.relationship,
+    //   profilePicture: characterEntity.profilePicture,
+    //   additionalInfo: characterEntity.additionalInfo,
+    // );
     if (await networkInfo.isConnected) {
       try {
-        await remoteDataSource.createCharacter(characterModel);
+        await remoteDataSource.createCharacter(characterEntity);
         return right(unit);
       } on ServerException {
         return left(ServerFailure());
@@ -56,21 +56,23 @@ class CharacterRepositoryImpl implements CharacterRepository {
   }
 
   @override
-  Stream<Either<Failure, List<CharacterEntity>>>
+  Stream<Either<Failure, List<CharacterModel>>>
       getAllCharactersOfUser() async* {
     if (await networkInfo.isConnected) {
       try {
         // Assuming getAllCharactersOfUser returns a Stream<List<CharacterModel>>
-        await for (final listCharacters
-            in remoteDataSource.getAllCharactersOfUser()) {
+      await for (final listCharacters in remoteDataSource.getAllCharactersOfUser()) {
+        // c for (final listCharacters
+       //     in remoteDataSource.getAllCharactersOfUser()) {
           // Flatten the list of CharacterModel to a list of CharacterEntity
-          final listCharactersEntities =
-              listCharacters.map((character) => character.toEntity()).toList();
+        //  final listCharactersEntities =
+         //     listCharacters.map((character) => character.toEntity()).toList();
 
           // Yield the list of CharacterEntity wrapped in Right
-          yield Right(listCharactersEntities);
+      yield Right(listCharacters);
+      }
         }
-      } on ServerException {
+       on ServerException {
         yield Left(ServerFailure());
       }
     } else {
@@ -79,19 +81,19 @@ class CharacterRepositoryImpl implements CharacterRepository {
   }
 
   @override
-  Future<Either<Failure, CharacterEntity>> updateCharacter(
-      CharacterEntity characterEntity) async {
+  Future<Either<Failure, CharacterModel>> updateCharacter(
+      CharacterModel characterEntity) async {
     if (await networkInfo.isConnected) {
       try {
         // Convert CharacterEntity to CharacterModel
-        final CharacterModel characterModel = CharacterModel(
-            id: characterEntity.id,
-            name: characterEntity.name,
-            profilePicture: characterEntity.profilePicture,
-            relationship: characterEntity.relationship,
-            additionalInfo: characterEntity.additionalInfo);
+        // final CharacterModel characterModel = CharacterModel(
+        //     id: characterEntity.id,
+        //     name: characterEntity.name,
+        //     profilePicture: characterEntity.profilePicture,
+        //     relationship: characterEntity.relationship,
+        //     additionalInfo: characterEntity.additionalInfo);
         // Call the remote data source to update the character
-        await remoteDataSource.updateCharacter(character: characterModel);
+        await remoteDataSource.updateCharacter(character: characterEntity);
         // Return the updated character entity
         return Right(characterEntity);
       } on ServerException {

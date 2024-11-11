@@ -4,6 +4,7 @@ import 'package:date_keeper/features/auth/presentation/pages/login_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/login_with_email_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/main_page.dart';
 import 'package:date_keeper/features/auth/presentation/pages/sign_up_with_email_page.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/pages/character_screen.dart';
 import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
@@ -86,7 +87,7 @@ class AppRouter {
             name: 'charcter',
             builder: (context, state) {
               // Extract parameters using state.extra
-    final character = state.extra as CharacterEntity;
+    final character = state.extra as CharacterModel;
         
               return CharacterScreen(
                 character: character,
