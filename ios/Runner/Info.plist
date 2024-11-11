@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Take image from phone</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Take image from phone</string>
 </dict>
 </plist>
