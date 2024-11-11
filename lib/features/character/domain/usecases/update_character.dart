@@ -3,6 +3,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:date_keeper/core/error/failures.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/domain/repositories/character_repository.dart';
 
@@ -12,8 +13,8 @@ class UpdateCharacterUsercase {
     required this.characterRepository,
   });
 
-  Future<Either<Failure, CharacterEntity>> call(
-      CharacterEntity characterEntity) async {
+  Future<Either<Failure, CharacterModel>> call(
+      CharacterModel characterEntity) async {
     return await characterRepository.updateCharacter(characterEntity);
   }
 }

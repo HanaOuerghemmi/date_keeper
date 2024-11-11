@@ -1,4 +1,5 @@
 import 'package:date_keeper/core/core.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/bloc/character_bloc.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _CreateCharacterPageState extends State<CreateCharacterPage> {
       context.read<CharacterBloc>().add(
         CharacterEvent.createCharacter(
           //fileImage: _image!,
-          characterEntity: CharacterEntity(
+          characterEntity: CharacterModel(
             name: name,
             relationship: relationship,
             profilePicture: _image != null ? _image!.path : '',

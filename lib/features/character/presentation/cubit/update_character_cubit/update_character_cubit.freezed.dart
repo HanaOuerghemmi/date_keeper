@@ -20,7 +20,7 @@ mixin _$UpdateCharacterState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CharacterEntity character) success,
+    required TResult Function(CharacterModel character) success,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$UpdateCharacterState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CharacterEntity character)? success,
+    TResult? Function(CharacterModel character)? success,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$UpdateCharacterState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CharacterEntity character)? success,
+    TResult Function(CharacterModel character)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -127,7 +127,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CharacterEntity character) success,
+    required TResult Function(CharacterModel character) success,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -138,7 +138,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CharacterEntity character)? success,
+    TResult? Function(CharacterModel character)? success,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -149,7 +149,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CharacterEntity character)? success,
+    TResult Function(CharacterModel character)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -241,7 +241,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CharacterEntity character) success,
+    required TResult Function(CharacterModel character) success,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -252,7 +252,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CharacterEntity character)? success,
+    TResult? Function(CharacterModel character)? success,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -263,7 +263,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CharacterEntity character)? success,
+    TResult Function(CharacterModel character)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -321,7 +321,7 @@ abstract class _$$SucessImplCopyWith<$Res> {
           _$SucessImpl value, $Res Function(_$SucessImpl) then) =
       __$$SucessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({CharacterEntity character});
+  $Res call({CharacterModel character});
 }
 
 /// @nodoc
@@ -341,7 +341,7 @@ class __$$SucessImplCopyWithImpl<$Res>
       character: null == character
           ? _value.character
           : character // ignore: cast_nullable_to_non_nullable
-              as CharacterEntity,
+              as CharacterModel,
     ));
   }
 }
@@ -352,7 +352,7 @@ class _$SucessImpl implements _Sucess {
   const _$SucessImpl({required this.character});
 
   @override
-  final CharacterEntity character;
+  final CharacterModel character;
 
   @override
   String toString() {
@@ -382,7 +382,7 @@ class _$SucessImpl implements _Sucess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CharacterEntity character) success,
+    required TResult Function(CharacterModel character) success,
     required TResult Function(String message) error,
   }) {
     return success(character);
@@ -393,7 +393,7 @@ class _$SucessImpl implements _Sucess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CharacterEntity character)? success,
+    TResult? Function(CharacterModel character)? success,
     TResult? Function(String message)? error,
   }) {
     return success?.call(character);
@@ -404,7 +404,7 @@ class _$SucessImpl implements _Sucess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CharacterEntity character)? success,
+    TResult Function(CharacterModel character)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -453,10 +453,10 @@ class _$SucessImpl implements _Sucess {
 }
 
 abstract class _Sucess implements UpdateCharacterState {
-  const factory _Sucess({required final CharacterEntity character}) =
+  const factory _Sucess({required final CharacterModel character}) =
       _$SucessImpl;
 
-  CharacterEntity get character;
+  CharacterModel get character;
   @JsonKey(ignore: true)
   _$$SucessImplCopyWith<_$SucessImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -528,7 +528,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(CharacterEntity character) success,
+    required TResult Function(CharacterModel character) success,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -539,7 +539,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(CharacterEntity character)? success,
+    TResult? Function(CharacterModel character)? success,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -550,7 +550,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(CharacterEntity character)? success,
+    TResult Function(CharacterModel character)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {

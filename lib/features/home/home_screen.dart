@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/core/rooting/app_rooting.dart';
+import 'package:date_keeper/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
+import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
@@ -8,7 +13,6 @@ import 'package:date_keeper/features/event/presentation/widgets/event_card_widge
 import 'package:date_keeper/features/home/widgets/home_appbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,10 +24,41 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<CharacterModel> characters = [];
+  StreamSubscription? characterSubscription;
 
-   void initState() {
-    context.read<GetAllCharacterCubit>().getAllCharacters();
+  @override
+  void initState() {
+    super.initState();
+    fetchCharacters();
   }
+
+  void fetchCharacters() {
+    final cubit = context.read<GetAllCharacterCubit>();
+    cubit.getAllCharacters();
+
+    // Listen to the cubit's state stream
+    characterSubscription = cubit.stream.listen((state) {
+      state.maybeWhen(
+        loaded: (listCharacters) {
+          setState(() {
+            characters = listCharacters; // Access listCharacters directly from the loaded state
+          });
+        },
+        orElse: () {
+          // Handle other states if needed
+        },
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription to avoid memory leaks
+    characterSubscription?.cancel();
+    super.dispose();
+  }
+
   void _refreshEventList() {
     context.read<GetallEventCubit>().getAllEvents();
   }
@@ -50,14 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50), // Adjust the circular radius
+          borderRadius: BorderRadius.circular(50),
         ),
         elevation: 1,
-        onPressed: () => showAddEventModal(context, _refreshEventList),
-        // navigateGoOption(
-        //   context: context,
-        //   routeName: '/addEvent',
-        // ),
+        onPressed: () => showAddEventModal(context, _refreshEventList, characters),
         backgroundColor: primaryColor,
         child: Icon(
           Icons.calendar_month_sharp,

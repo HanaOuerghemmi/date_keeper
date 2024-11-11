@@ -20,7 +20,7 @@ mixin _$GetAllCharacterState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CharacterEntity> listCharacters) loaded,
+    required TResult Function(List<CharacterModel> listCharacters) loaded,
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$GetAllCharacterState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult? Function(List<CharacterModel> listCharacters)? loaded,
     TResult? Function()? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$GetAllCharacterState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult Function(List<CharacterModel> listCharacters)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) =>
@@ -127,7 +127,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CharacterEntity> listCharacters) loaded,
+    required TResult Function(List<CharacterModel> listCharacters) loaded,
     required TResult Function() error,
   }) {
     return initial();
@@ -138,7 +138,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult? Function(List<CharacterModel> listCharacters)? loaded,
     TResult? Function()? error,
   }) {
     return initial?.call();
@@ -149,7 +149,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult Function(List<CharacterModel> listCharacters)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -241,7 +241,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CharacterEntity> listCharacters) loaded,
+    required TResult Function(List<CharacterModel> listCharacters) loaded,
     required TResult Function() error,
   }) {
     return loading();
@@ -252,7 +252,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult? Function(List<CharacterModel> listCharacters)? loaded,
     TResult? Function()? error,
   }) {
     return loading?.call();
@@ -263,7 +263,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult Function(List<CharacterModel> listCharacters)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -321,7 +321,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<CharacterEntity> listCharacters});
+  $Res call({List<CharacterModel> listCharacters});
 }
 
 /// @nodoc
@@ -341,7 +341,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
       listCharacters: null == listCharacters
           ? _value._listCharacters
           : listCharacters // ignore: cast_nullable_to_non_nullable
-              as List<CharacterEntity>,
+              as List<CharacterModel>,
     ));
   }
 }
@@ -349,12 +349,12 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required final List<CharacterEntity> listCharacters})
+  const _$LoadedImpl({required final List<CharacterModel> listCharacters})
       : _listCharacters = listCharacters;
 
-  final List<CharacterEntity> _listCharacters;
+  final List<CharacterModel> _listCharacters;
   @override
-  List<CharacterEntity> get listCharacters {
+  List<CharacterModel> get listCharacters {
     if (_listCharacters is EqualUnmodifiableListView) return _listCharacters;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_listCharacters);
@@ -389,7 +389,7 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CharacterEntity> listCharacters) loaded,
+    required TResult Function(List<CharacterModel> listCharacters) loaded,
     required TResult Function() error,
   }) {
     return loaded(listCharacters);
@@ -400,7 +400,7 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult? Function(List<CharacterModel> listCharacters)? loaded,
     TResult? Function()? error,
   }) {
     return loaded?.call(listCharacters);
@@ -411,7 +411,7 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult Function(List<CharacterModel> listCharacters)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -460,10 +460,10 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements GetAllCharacterState {
-  const factory _Loaded({required final List<CharacterEntity> listCharacters}) =
+  const factory _Loaded({required final List<CharacterModel> listCharacters}) =
       _$LoadedImpl;
 
-  List<CharacterEntity> get listCharacters;
+  List<CharacterModel> get listCharacters;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -509,7 +509,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CharacterEntity> listCharacters) loaded,
+    required TResult Function(List<CharacterModel> listCharacters) loaded,
     required TResult Function() error,
   }) {
     return error();
@@ -520,7 +520,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult? Function(List<CharacterModel> listCharacters)? loaded,
     TResult? Function()? error,
   }) {
     return error?.call();
@@ -531,7 +531,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CharacterEntity> listCharacters)? loaded,
+    TResult Function(List<CharacterModel> listCharacters)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {

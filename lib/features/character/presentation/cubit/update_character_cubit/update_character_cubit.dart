@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/domain/usecases/update_character.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,7 +14,7 @@ class UpdateCharacterCubit extends Cubit<UpdateCharacterState> {
    
   UpdateCharacterCubit({required this.upadateCharacterUsercase}) : super(UpdateCharacterState.initial());
 
- Future<void> upadateCharacter(CharacterEntity character) async {
+ Future<void> upadateCharacter(CharacterModel character) async {
     emit(UpdateCharacterState.loading());
 
     final result = await upadateCharacterUsercase(character);

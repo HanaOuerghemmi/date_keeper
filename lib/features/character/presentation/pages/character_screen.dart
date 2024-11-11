@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/cubit/delete_character_cubit/delete_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/cubit/update_character_cubit/update_character_cubit.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CharacterScreen extends StatefulWidget {
-  final CharacterEntity character;
+  final CharacterModel character;
 
   const CharacterScreen({
     Key? key,
@@ -52,7 +53,7 @@ class _CharacterScreenState extends State<CharacterScreen> {
   }
 
   void _onSave(BuildContext context) {
-    final updatedCharacter = CharacterEntity(
+    final updatedCharacter = CharacterModel(
       id: widget.character.id,
       name: nameController.text,
       profilePicture: newProfilePicture ?? widget.character.profilePicture,

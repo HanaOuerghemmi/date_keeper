@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';

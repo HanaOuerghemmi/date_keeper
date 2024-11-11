@@ -16,20 +16,20 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CharacterEvent {
-  CharacterEntity get characterEntity => throw _privateConstructorUsedError;
+  CharacterModel get characterEntity => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CharacterEntity characterEntity) createCharacter,
+    required TResult Function(CharacterModel characterEntity) createCharacter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(CharacterEntity characterEntity)? createCharacter,
+    TResult? Function(CharacterModel characterEntity)? createCharacter,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CharacterEntity characterEntity)? createCharacter,
+    TResult Function(CharacterModel characterEntity)? createCharacter,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -61,7 +61,7 @@ abstract class $CharacterEventCopyWith<$Res> {
           CharacterEvent value, $Res Function(CharacterEvent) then) =
       _$CharacterEventCopyWithImpl<$Res, CharacterEvent>;
   @useResult
-  $Res call({CharacterEntity characterEntity});
+  $Res call({CharacterModel characterEntity});
 }
 
 /// @nodoc
@@ -83,7 +83,7 @@ class _$CharacterEventCopyWithImpl<$Res, $Val extends CharacterEvent>
       characterEntity: null == characterEntity
           ? _value.characterEntity
           : characterEntity // ignore: cast_nullable_to_non_nullable
-              as CharacterEntity,
+              as CharacterModel,
     ) as $Val);
   }
 }
@@ -96,7 +96,7 @@ abstract class _$$CreateCharacterImplCopyWith<$Res>
       __$$CreateCharacterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({CharacterEntity characterEntity});
+  $Res call({CharacterModel characterEntity});
 }
 
 /// @nodoc
@@ -116,7 +116,7 @@ class __$$CreateCharacterImplCopyWithImpl<$Res>
       characterEntity: null == characterEntity
           ? _value.characterEntity
           : characterEntity // ignore: cast_nullable_to_non_nullable
-              as CharacterEntity,
+              as CharacterModel,
     ));
   }
 }
@@ -127,7 +127,7 @@ class _$CreateCharacterImpl implements _CreateCharacter {
   const _$CreateCharacterImpl({required this.characterEntity});
 
   @override
-  final CharacterEntity characterEntity;
+  final CharacterModel characterEntity;
 
   @override
   String toString() {
@@ -156,7 +156,7 @@ class _$CreateCharacterImpl implements _CreateCharacter {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(CharacterEntity characterEntity) createCharacter,
+    required TResult Function(CharacterModel characterEntity) createCharacter,
   }) {
     return createCharacter(characterEntity);
   }
@@ -164,7 +164,7 @@ class _$CreateCharacterImpl implements _CreateCharacter {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(CharacterEntity characterEntity)? createCharacter,
+    TResult? Function(CharacterModel characterEntity)? createCharacter,
   }) {
     return createCharacter?.call(characterEntity);
   }
@@ -172,7 +172,7 @@ class _$CreateCharacterImpl implements _CreateCharacter {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(CharacterEntity characterEntity)? createCharacter,
+    TResult Function(CharacterModel characterEntity)? createCharacter,
     required TResult orElse(),
   }) {
     if (createCharacter != null) {
@@ -212,10 +212,10 @@ class _$CreateCharacterImpl implements _CreateCharacter {
 
 abstract class _CreateCharacter implements CharacterEvent {
   const factory _CreateCharacter(
-      {required final CharacterEntity characterEntity}) = _$CreateCharacterImpl;
+      {required final CharacterModel characterEntity}) = _$CreateCharacterImpl;
 
   @override
-  CharacterEntity get characterEntity;
+  CharacterModel get characterEntity;
   @override
   @JsonKey(ignore: true)
   _$$CreateCharacterImplCopyWith<_$CreateCharacterImpl> get copyWith =>
