@@ -1,3 +1,4 @@
+import 'package:date_keeper/features/character/data/datasources/local_data_source/character_remote_data_source_impl.dart';
 import 'package:date_keeper/features/character/data/datasources/remote_data_source/character_remote_data_source_impl.dart';
 import 'package:date_keeper/features/character/data/repositories/character_repository_impl.dart';
 import 'package:date_keeper/features/character/domain/repositories/character_repository.dart';
@@ -33,11 +34,11 @@ Future<void> characterInjectionContainer() async {
 
   sl.registerLazySingleton<GetAllCaractersOfUserUsercase>(
       () => GetAllCaractersOfUserUsercase(characterRepository: sl()));
- 
- sl.registerLazySingleton<DeleteCharacterUseCase>(
+
+  sl.registerLazySingleton<DeleteCharacterUseCase>(
       () => DeleteCharacterUseCase(characterRepository: sl()));
-sl.registerLazySingleton<UpdateCharacterUsercase>(
-      () =>UpdateCharacterUsercase(characterRepository: sl()));
+  sl.registerLazySingleton<UpdateCharacterUsercase>(
+      () => UpdateCharacterUsercase(characterRepository: sl()));
 
   // sl.registerLazySingleton<LogInUsercase>(
   //     () => LogInUsercase(authRepository: sl()));
@@ -49,8 +50,11 @@ sl.registerLazySingleton<UpdateCharacterUsercase>(
   //     () => SignInWithGoogleUsercase(authRepository: sl()));
 
   // * REPOSITORY & DATA SOURCES INJECTION
-  sl.registerLazySingleton<CharacterRepository>(
-      () => CharacterRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<CharacterRepository>(() => CharacterRepositoryImpl(
+        remoteDataSource: sl(),
+        networkInfo: sl(),
+        localDataSource: sl(),
+      ));
 
   sl.registerLazySingleton<CharacterRemoteDataSourceImpl>(
       () => CharacterRemoteDataSourceImpl(
@@ -58,4 +62,7 @@ sl.registerLazySingleton<UpdateCharacterUsercase>(
             firebaseFirestore: sl(),
             firebaseStorage: sl(),
           ));
+
+  sl.registerLazySingleton<CharacterLocalDataSourceImpl>(
+      () => CharacterLocalDataSourceImpl(sharedPreferences: sl()));
 }

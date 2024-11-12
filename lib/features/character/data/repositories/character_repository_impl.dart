@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:date_keeper/core/core.dart';
 import 'package:date_keeper/core/error/failures.dart';
+import 'package:date_keeper/features/character/data/datasources/local_data_source/character_remote_data_source_impl.dart';
 import 'package:date_keeper/features/character/data/datasources/remote_data_source/character_remote_data_source_impl.dart';
 import 'package:date_keeper/features/character/data/models/character_model.dart';
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
@@ -13,10 +14,12 @@ import 'package:date_keeper/features/character/domain/repositories/character_rep
 class CharacterRepositoryImpl implements CharacterRepository {
   final NetworkInfo networkInfo;
   final CharacterRemoteDataSourceImpl remoteDataSource;
+  final CharacterLocalDataSourceImpl localDataSource;
 
   CharacterRepositoryImpl({
     required this.networkInfo,
     required this.remoteDataSource,
+    required this.localDataSource,
   });
   @override
   Future<Either<Failure, Unit>> createCharacter(
@@ -61,22 +64,28 @@ class CharacterRepositoryImpl implements CharacterRepository {
     if (await networkInfo.isConnected) {
       try {
         // Assuming getAllCharactersOfUser returns a Stream<List<CharacterModel>>
-      await for (final listCharacters in remoteDataSource.getAllCharactersOfUser()) {
-        // c for (final listCharacters
-       //     in remoteDataSource.getAllCharactersOfUser()) {
+        await for (final listCharacters
+            in remoteDataSource.getAllCharactersOfUser()) {
+          // c for (final listCharacters
+          //     in remoteDataSource.getAllCharactersOfUser()) {
           // Flatten the list of CharacterModel to a list of CharacterEntity
-        //  final listCharactersEntities =
-         //     listCharacters.map((character) => character.toEntity()).toList();
+          //  final listCharactersEntities =
+          //     listCharacters.map((character) => character.toEntity()).toList();
 
           // Yield the list of CharacterEntity wrapped in Right
-      yield Right(listCharacters);
-      }
+          localDataSource.cacheCharacters(listCharacters);
+          yield Right(listCharacters);
         }
-       on ServerException {
+      } on ServerException {
         yield Left(ServerFailure());
       }
     } else {
-      yield Left(OfflineFailure());
+      try {
+        final localPosts = await localDataSource.getCachedCharacters();
+        yield Right(localPosts);
+      } on EmptyCacheException {
+        yield const Left(EmptyCacheFailure());
+      }
     }
   }
 
