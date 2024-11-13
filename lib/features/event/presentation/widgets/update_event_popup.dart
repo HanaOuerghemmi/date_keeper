@@ -1,80 +1,121 @@
+import 'package:date_keeper/core/core.dart';
+import 'package:date_keeper/core/widget/custom_textfield.dart';
+import 'package:date_keeper/features/event/presentation/widgets/events_ittems.dart';
 import 'package:flutter/material.dart';
 import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 
 Future<EventEntity?> showUpdatePopup(
     BuildContext context, EventEntity event, int index) async {
-  // Initialize controllers with current event values
   TextEditingController titleController =
       TextEditingController(text: event.title);
   TextEditingController descriptionController =
       TextEditingController(text: event.description);
   TextEditingController typeController =
       TextEditingController(text: event.type);
-
-  Color updatedColor = Colors.red; // Track the selected color
+  TextEditingController dateController =
+      TextEditingController(text: event.date);
+  TextEditingController selectedColorController =
+      TextEditingController(text: event.statusColor);
 
   return await showDialog<EventEntity>(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
         builder: (context, setState) {
-          return AlertDialog(
-            title: Text('Update Event'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
-                ),
-                TextField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-                TextField(
-                  controller: typeController,
-                  decoration: InputDecoration(labelText: 'Event Type'),
-                ),
-                DropdownButton<Color>(
-                  value: updatedColor,
-                  items: [
-                    DropdownMenuItem(value: Colors.green, child: Text("Green")),
-                    DropdownMenuItem(value: Colors.yellow, child: Text("Yellow")),
-                    DropdownMenuItem(value: Colors.red, child: Text("Red")),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      updatedColor = value ?? Colors.green; // Update color
-                    });
-                  },
-                ),
-              ],
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(null); // Cancel without updating
-                },
-                child: Text('Cancel'),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Update Event',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    smallPaddingVert,
+                    // Avatar and User Name
+                    event.user != null
+                        ? Column(
+                            children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                      radius: 20,
+                                      backgroundImage: NetworkImage(
+                                          event.user!.profilePicture!)),
+                                  smallPaddingHor,
+                                  Text(
+                                    event.user!.name!,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                            ],
+                          )
+                        : SizedBox.shrink(),
+
+                    smallPaddingVert,
+                    CustomTextField(
+                      controller: titleController,
+                      label: 'Title',
+                    ),
+                    CustomTextField(
+                      controller: typeController,
+                      label: 'Event Type',
+                    ),
+                    CustomTextField(
+                      controller: descriptionController,
+                      label: 'Description',
+                      maxLines: 2,
+                    ),
+                    smallPaddingVert,
+                    DateItemSelector(dateController: dateController),
+                    smallPaddingVert,
+                    FittedBox(
+                      child: StatusItemSelector(
+                          selectedColorText: selectedColorController),
+                    ),
+                    mediumPaddingVert,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(null),
+                          child: Text('Cancel'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            final updatedEvent = EventEntity(
+                              user: event.user,
+                              date: dateController.text,
+                              id: event.id,
+                              title: titleController.text,
+                              description: descriptionController.text,
+                              type: typeController.text,
+                              statusColor: selectedColorController.text,
+                            );
+                            Navigator.of(context).pop(updatedEvent);
+                          },
+                          child: Text('Update'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              TextButton(
-                onPressed: () {
-                  // Create a new EventEntity with updated details
-                  final updatedEvent = EventEntity(
-                    user: event.user,
-                    date: event.date,
-                    id: event.id,
-                    title: titleController.text,
-                    description: descriptionController.text,
-                    type: typeController.text,
-                    statusColor: 'red',
-                    // Add other fields if needed
-                  );
-                  Navigator.of(context).pop(updatedEvent); // Confirm update
-                },
-                child: Text('Update'),
-              ),
-            ],
+            ),
           );
         },
       );
