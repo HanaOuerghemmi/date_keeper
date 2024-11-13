@@ -3,10 +3,12 @@ import 'package:date_keeper/features/event/data/repositories/event_repository_im
 import 'package:date_keeper/features/event/domain/repositories/event_repository.dart';
 import 'package:date_keeper/features/event/domain/usecases/creat_event_usescase.dart';
 import 'package:date_keeper/features/event/domain/usecases/delte_event_usecase.dart';
+import 'package:date_keeper/features/event/domain/usecases/getall_event_by_charactter_usecase.dart';
 import 'package:date_keeper/features/event/domain/usecases/getall_event_usecase.dart';
 import 'package:date_keeper/features/event/domain/usecases/update_event_usecas.dart';
 import 'package:date_keeper/features/event/presentation/bloc/create_event_cubit/create_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/delete_event_cubit/delete_event_cubit.dart';
+import 'package:date_keeper/features/event/presentation/bloc/get_all_event_by_character_cubit/get_all_event_by_character_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/update_event_cubit/update_event_cubit.dart';
 import 'package:date_keeper/main_injection_container.dart';
@@ -26,6 +28,10 @@ Future<void> eventInjectionContainer() async {
         updateEventUsecase: sl(),
       ));
 
+sl.registerLazySingleton<GetAllEventByCharacterCubit>(() => GetAllEventByCharacterCubit(
+        getallEventByCharacterUsecase: sl(),
+      ));
+      
 //************************** uses cases injection  ***************/
 
   sl.registerLazySingleton<CreatEventUsescase>(
@@ -37,6 +43,8 @@ Future<void> eventInjectionContainer() async {
       () => DeleteEventUsecase(eventRepository: sl()));
   sl.registerLazySingleton<UpdateEventUsecase>(
       () => UpdateEventUsecase(eventRepository: sl()));
+ sl.registerLazySingleton<GetallEventByCharacterUsecase>(
+      () => GetallEventByCharacterUsecase(eventRepository: sl()));
 
 //************************** repository injection  *************/
   sl.registerLazySingleton<EventRepository>(

@@ -1,6 +1,5 @@
 import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 import 'package:date_keeper/features/event/presentation/bloc/delete_event_cubit/delete_event_cubit.dart';
-import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/update_event_cubit/update_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/widgets/confirmation_dialog.dart';
 import 'package:date_keeper/features/event/presentation/widgets/event_card.dart';
@@ -10,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventList extends StatefulWidget {
+  final List<EventEntity> listEvents;
+
+  const EventList({super.key, required this.listEvents});
+
   @override
   _EventListState createState() => _EventListState();
 }
@@ -20,11 +23,7 @@ class _EventListState extends State<EventList> {
   @override
   void initState() {
     super.initState();
-    _fetchEvents();
-  }
-
-  void _fetchEvents() {
-    context.read<GetallEventCubit>().getAllEvents();
+    expanded = List.generate(widget.listEvents.length, (_) => false);
   }
 
   Future<bool> _confirmDelete(EventEntity item) async {
@@ -50,7 +49,6 @@ class _EventListState extends State<EventList> {
           loading: (_) {},
           success: (_) {
             Navigator.of(context).pop();
-            _fetchEvents();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Event "${item.title}" deleted successfully')),
             );
@@ -87,7 +85,6 @@ class _EventListState extends State<EventList> {
           loading: (_) {},
           success: (_) {
             Navigator.of(context).pop();
-            _fetchEvents();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Event "${updatedEvent}" updated successfully')),
             );
@@ -107,56 +104,35 @@ class _EventListState extends State<EventList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GetallEventCubit, GetallEventState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          error: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(message)),
-            );
-          },
-          orElse: () {},
-        );
-      },
-      builder: (context, state) {
-        return state.maybeWhen(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          success: (events) {
-            expanded = List.generate(events.length, (_) => false);
+    final events = widget.listEvents;
 
-            if (events.isEmpty) {
-              return const Center(child: Text('No events yet'));
+    if (events.isEmpty) {
+      return const Center(child: Text('No events yet'));
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(8.0),
+      itemCount: events.length,
+      itemBuilder: (context, index) {
+        final item = events[index];
+        return Dismissible(
+          key: Key(item.id!),
+          background: swipeRightAction(),
+          secondaryBackground: swipeLeftAction(),
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.endToStart) {
+              return await _confirmDelete(item);
+            } else if (direction == DismissDirection.startToEnd) {
+              return await _confirmUpdate(item, index);
             }
-
-            return ListView.builder(
-              padding: const EdgeInsets.all(8.0),
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final item = events[index];
-                return Dismissible(
-                  key: Key(item.id!),
-                  background: swipeRightAction(),
-                  secondaryBackground: swipeLeftAction(),
-                  confirmDismiss: (direction) async {
-                    if (direction == DismissDirection.endToStart) {
-                      return await _confirmDelete(item);
-                    } else if (direction == DismissDirection.startToEnd) {
-                      return await _confirmUpdate(item, index);
-                    }
-                    return false;
-                  },
-                  onDismissed: (direction) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("${item.title} ${direction == DismissDirection.endToStart ? 'deleted' : 'updated'}")),
-                    );
-                  },
-                  child: EventCard(event: item),
-                );
-              },
+            return false;
+          },
+          onDismissed: (direction) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("${item.title} ${direction == DismissDirection.endToStart ? 'deleted' : 'updated'}")),
             );
           },
-          error: (message) => Center(child: Text('Error: $message')),
-          orElse: () => const Center(child: SizedBox.shrink()),
+          child: EventCard(event: item),
         );
       },
     );
