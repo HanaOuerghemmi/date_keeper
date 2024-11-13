@@ -7,6 +7,7 @@ import 'package:date_keeper/features/character/data/models/character_model.dart'
 import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
+import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 import 'package:date_keeper/features/event/presentation/bloc/get_all_event_cubit/getall_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/pages/add_event_screen.dart';
 import 'package:date_keeper/features/event/presentation/widgets/event_card_widget.dart';
@@ -26,11 +27,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<CharacterModel> characters = [];
   StreamSubscription? characterSubscription;
+  StreamSubscription? eventsSubscription;
+
+  List<EventEntity> events = [];
 
   @override
   void initState() {
     super.initState();
     fetchCharacters();
+    _refreshEventList();
   }
 
   void fetchCharacters() {
@@ -46,27 +51,40 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         orElse: () {
-          // Handle other states if needed
+          characters =[];
         },
       );
     });
   }
 
+  void _refreshEventList() {
+   final cubit = context.read<GetallEventCubit>();
+   cubit.getAllEvents();
+ eventsSubscription = cubit.stream.listen((state) {
+      state.maybeWhen(
+        success: (listEvents) {
+          setState(() {
+            events = listEvents; // Access listCharacters directly from the loaded state
+          });
+        },
+        orElse: () {
+          events =[];
+        },
+      );
+    });
+  }
   @override
   void dispose() {
     // Cancel the subscription to avoid memory leaks
     characterSubscription?.cancel();
+    eventsSubscription?.cancel();
     super.dispose();
   }
 
-  void _refreshEventList() {
-    context.read<GetallEventCubit>().getAllEvents();
-  }
 
   @override
   Widget build(BuildContext context) {
     final uidUser = FirebaseAuth.instance.currentUser?.uid;
-
     return Scaffold(
       appBar: HomeAppBar(userName: uidUser.toString()),
       body: Padding(
@@ -77,8 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
             smallPaddingVert,
             SingleChildScrollView(
               child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.60,
-                  child: EventList()),
+                  height: MediaQuery.of(context).size.height * 0.50,
+                  child: EventList(listEvents: events,)),
             ),
           ],
         ),

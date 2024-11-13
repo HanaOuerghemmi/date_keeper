@@ -135,4 +135,34 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource {
        return Left(ServerFailure('Failed to update event: $e'));
      }
   }
+  
+@override
+Future<Either<Failure, List<EventModel>>> getAllEventsByCharacter({String? idCharacter}) async {
+  try {
+    final uidUser = auth.currentUser?.uid;
+    if (uidUser == null) {
+      return Left(OfflineFailure('User not logged in'));
+    }
+    
+    if (idCharacter == null || idCharacter.isEmpty) {
+      return Left(ServerFailure('Character ID is required'));
+    }
+
+    final querySnapshot = await firebaseFirestore
+        .collection(collectionUsersName)
+        .doc(uidUser)
+        .collection(collectionEventName)
+        .where('user.id', isEqualTo: idCharacter)
+        .get();
+
+    final events = querySnapshot.docs
+        .map((doc) => EventModel.fromJson(doc.data()))
+        .toList();
+
+    return Right(events);
+  } catch (e) {
+    return Left(ServerFailure('Failed to retrieve events by character: $e'));
+  }
+}
+
 }

@@ -119,5 +119,36 @@ Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) async {
     }
 
   }
+  //************************* get all event by character ********************/
+  @override
+  Future<Either<Failure, List<EventEntity>>> getAllEventsByCharacter({String? idCharacter}) async{
+if (await networkInfo.isConnected) {
+    try {
+      final eventsResult = await remoteDataSource.getAllEventsByCharacter(idCharacter: idCharacter);
+      return eventsResult.fold(
+        (failure) => Left(failure), 
+        (eventsModelList) {
+          // Map each EventModel to an EventEntity
+          final eventsEntityList = eventsModelList.map((eventModel) {
+            return EventEntity(
+              id:eventModel.id ,
+              user: eventModel.user,
+              title: eventModel.title,
+              description: eventModel.description,
+              statusColor: eventModel.statusColor,
+              type: eventModel.type,
+              date: eventModel.date,
+            );
+          }).toList();
+          return Right(eventsEntityList);
+        },
+      );
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  } else {
+    return Left(OfflineFailure());
+  }
+  }
 
 }

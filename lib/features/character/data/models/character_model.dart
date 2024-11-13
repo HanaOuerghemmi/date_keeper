@@ -38,6 +38,7 @@ factory CharacterModel.fromJson(Map<String, dynamic> json) {
   // Convert CharacterEntity instance to Map for Firestore
   Map<String, dynamic> toJson() {
     return {
+      'id':id,
       'name': name,
       'relationship': relationship,
       'profilePicture': profilePicture,
@@ -56,12 +57,14 @@ factory CharacterModel.fromJson(Map<String, dynamic> json) {
   }
 
   CharacterModel copyWith({
+    String? id,
     String? name,
     String? relationship,
     String? profilePicture,
     String? additionalInfo,
   }) {
     return CharacterModel(
+      id: id?? this.id,
       name: name ?? this.name,
       relationship: relationship ?? this.relationship,
       profilePicture: profilePicture ?? this.profilePicture,

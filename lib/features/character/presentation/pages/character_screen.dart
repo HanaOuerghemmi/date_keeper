@@ -1,15 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:date_keeper/features/character/data/models/character_model.dart';
-import 'package:date_keeper/features/character/domain/entities/character_entity.dart';
 import 'package:date_keeper/features/character/presentation/cubit/delete_character_cubit/delete_character_cubit.dart';
 import 'package:date_keeper/features/character/presentation/cubit/update_character_cubit/update_character_cubit.dart';
+import 'package:date_keeper/features/event/presentation/bloc/get_all_event_by_character_cubit/get_all_event_by_character_cubit.dart';
+import 'package:date_keeper/features/event/presentation/widgets/event_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CharacterScreen extends StatefulWidget {
   final CharacterModel character;
-
   const CharacterScreen({
     Key? key,
     required this.character,
@@ -28,7 +29,8 @@ class _CharacterScreenState extends State<CharacterScreen> {
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.character.name);
-
+    // Fetch events for the character on initialization
+    context.read<GetAllEventByCharacterCubit>().getAllEventsByCharacter(widget.character.id!);
   }
 
   @override
@@ -69,7 +71,6 @@ class _CharacterScreenState extends State<CharacterScreen> {
     );
   }
 
-  // Function to delete character
   void _onDelete(BuildContext context) {
     showDialog(
       context: context,
@@ -78,15 +79,12 @@ class _CharacterScreenState extends State<CharacterScreen> {
         content: Text('Are you sure you want to delete this character?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(), // Cancel deletion
+            onPressed: () => Navigator.of(context).pop(),
             child: Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
-              // Call delete logic here (e.g., delete from Firebase or API)
-              // Assuming there is a delete method in the cubit
               context.read<DeleteCharacterCubit>().deleteCharacter(widget.character.id!);
-
               Navigator.of(context).pop(); // Close the dialog
               Navigator.of(context).pop(); // Go back to the previous screen
               ScaffoldMessenger.of(context).showSnackBar(
@@ -138,7 +136,7 @@ class _CharacterScreenState extends State<CharacterScreen> {
               ),
             IconButton(
               icon: Icon(Icons.delete),
-              onPressed: () => _onDelete(context), // Delete button
+              onPressed: () => _onDelete(context),
             ),
           ],
         ),
@@ -173,33 +171,22 @@ class _CharacterScreenState extends State<CharacterScreen> {
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
               SizedBox(height: 16),
-              isEditing
-                  ? TextField(
-                      maxLines: 3,
-                      decoration: InputDecoration(
-                        labelText: 'Description',
-                        border: OutlineInputBorder(),
-                      ),
-                    )
-                  : Text(
-                      'No description provided.',
-                      style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              BlocBuilder<GetAllEventByCharacterCubit, GetAllEventByCharacterState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    success: (events) => Expanded(
+                      child: events.isEmpty
+                          ? Center(child: Text('No events for this character'))
+                          : EventList(listEvents:events,)
+                          
+                        
                     ),
-              Spacer(),
-              if (isEditing)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => _onSave(context),
-                      child: Text('Save'),
-                    ),
-                    TextButton(
-                      onPressed: _toggleEditMode,
-                      child: Text('Cancel', style: TextStyle(color: Colors.red)),
-                    ),
-                  ],
-                ),
+                    loading: () => Center(child: CircularProgressIndicator()),
+                    error: (message) => Center(child: Text('Error: $message')),
+                    orElse: () => Center(child: Text('Something went wrong')),
+                  );
+                },
+              ),
             ],
           ),
         ),
