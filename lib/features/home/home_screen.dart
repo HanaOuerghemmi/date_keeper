@@ -84,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+   // _refreshEventList();// just to show directly but we need to fix 
     final uidUser = FirebaseAuth.instance.currentUser?.uid;
     return Scaffold(
       appBar: HomeAppBar(userName: uidUser.toString()),
