@@ -34,29 +34,29 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
   // }
 
   @override
-  Future<void> createCharacter(CharacterModel characterModel) async {
-    final uidUser = auth.currentUser?.uid;
+ Future<void> createCharacter(CharacterModel characterModel) async {
+  final uidUser = auth.currentUser?.uid;
+  const String defaultImagePath = 'assets/images/default_pic.png';
 
-    // Check if profilePicture is not empty or null
-    String imageUrl = '';
-    if (characterModel.profilePicture != null &&
-        characterModel.profilePicture!.isNotEmpty) {
-      final imageFile = File(characterModel.profilePicture!);
-      // Attempt to upload the image and get the URL
-      imageUrl = await uploadImageToFirebase(imageFile);
-    }
-
-    // Create a new CharacterModel with the profile picture URL
-    final characterModelWithPict =
-        characterModel.copyWith(profilePicture: imageUrl);
-
-    log('User ID: $uidUser');
-    await firebaseFirestore
-        .collection(collectionUsersName)
-        .doc(uidUser)
-        .collection(collectionCharacterName)
-        .add(characterModelWithPict.toJson());
+  File? imageFile;
+  if (characterModel.profilePicture != null &&
+      characterModel.profilePicture!.isNotEmpty) {
+    imageFile = File(characterModel.profilePicture!);
   }
+  final imageUrl = await uploadImageToFirebase(imageFile, defaultImagePath: defaultImagePath);
+
+  // Create a new CharacterModel with the profile picture URL
+  final updatedCharacterModel = characterModel.copyWith(profilePicture: imageUrl);
+
+  log('User ID: $uidUser');
+
+  // Save the updated character model in Firestore
+  await firebaseFirestore
+      .collection(collectionUsersName)
+      .doc(uidUser)
+      .collection(collectionCharacterName)
+      .add(updatedCharacterModel.toJson());
+}
 
   @override
   Future<Either<Failure, Unit>> deleteCharacter(String charcterId) async {
