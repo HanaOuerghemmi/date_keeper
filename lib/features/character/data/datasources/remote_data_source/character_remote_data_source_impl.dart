@@ -73,6 +73,21 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
           .doc(charcterId)
           .delete();
 
+      final querySnapshot = await firebaseFirestore
+          .collection(collectionUsersName)
+          .doc(uidUser)
+          .collection(collectionEventName)
+          .where('user.id', isEqualTo: charcterId)
+          .get();
+
+      final batch = firebaseFirestore.batch();
+
+      for (var doc in querySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      await batch.commit();
+
       log('Successfully deleted event with ID: $charcterId');
       return const Right(unit);
     } catch (e) {
@@ -100,75 +115,70 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
       return;
     }
   }
-    @override
-    Future<Either<Failure, CharacterModel>> updateCharacter({CharacterModel? character}) async {
-      try {
-        final auth = FirebaseAuth.instance;
-        final uidUser = auth.currentUser?.uid;
 
-        if (uidUser == null) {
-          return Left(OfflineFailure('User not logged in'));
-        }
+  @override
+  Future<Either<Failure, CharacterModel>> updateCharacter(
+      {CharacterModel? character}) async {
+    try {
+      final auth = FirebaseAuth.instance;
+      final uidUser = auth.currentUser?.uid;
 
-        final firebaseFirestore = FirebaseFirestore.instance;
-
-        // Check if profilePicture has changed and needs to be uploaded
-        String imageUrl = character!.profilePicture ?? '';
-        if (character.profilePicture != null &&
-            character.profilePicture!.isNotEmpty &&
-            !character.profilePicture!.startsWith('http')) {
-          final imageFile = File(character.profilePicture!);
-          imageUrl = await uploadImageToFirebase(
-              imageFile); // Function to upload and return the URL
-        }
-        // Create updated CharacterModel with new profile picture URL
-        final updatedCharacter = character.copyWith(profilePicture: imageUrl);
-        // Locate the document reference in Firestore
-        final characterRef = firebaseFirestore
-            .collection(collectionUsersName)
-            .doc(uidUser)
-            .collection(collectionCharacterName)
-            .doc(
-                character.id); 
-
-        // Update the document in Firestore
-        await characterRef.update(updatedCharacter.toJson());
-
-        // Return the updated character model as a success response
-        return Right(updatedCharacter);
-      } catch (e) {
-        return Left(ServerFailure('Failed to update character: $e'));
+      if (uidUser == null) {
+        return Left(OfflineFailure('User not logged in'));
       }
-    }
 
+      final firebaseFirestore = FirebaseFirestore.instance;
 
-
-    @override
-    Future<String> uploadCharacterImage(File imageFile) async {
-      // final ref = firebaseStorage.ref().child('characters/${imageFile}');
-      // final uploadTask = await ref.putFile(imageFile);
-      // return await uploadTask.ref.getDownloadURL();
-      try {
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-        Reference storageRef =
-            firebaseStorage.ref().child('character_images/$fileName');
-        UploadTask uploadTask = storageRef.putFile(imageFile);
-        TaskSnapshot snapshot = await uploadTask;
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        return downloadUrl;
-      } catch (e) {
-        print("Error uploading image: $e");
-        return '';
+      // Check if profilePicture has changed and needs to be uploaded
+      String imageUrl = character!.profilePicture ?? '';
+      if (character.profilePicture != null &&
+          character.profilePicture!.isNotEmpty &&
+          !character.profilePicture!.startsWith('http')) {
+        final imageFile = File(character.profilePicture!);
+        imageUrl = await uploadImageToFirebase(
+            imageFile); // Function to upload and return the URL
       }
+      // Create updated CharacterModel with new profile picture URL
+      final updatedCharacter = character.copyWith(profilePicture: imageUrl);
+      // Locate the document reference in Firestore
+      final characterRef = firebaseFirestore
+          .collection(collectionUsersName)
+          .doc(uidUser)
+          .collection(collectionCharacterName)
+          .doc(character.id);
+
+      // Update the document in Firestore
+      await characterRef.update(updatedCharacter.toJson());
+
+      // Return the updated character model as a success response
+      return Right(updatedCharacter);
+    } catch (e) {
+      return Left(ServerFailure('Failed to update character: $e'));
     }
-  
+  }
 
-
+  @override
+  Future<String> uploadCharacterImage(File imageFile) async {
+    // final ref = firebaseStorage.ref().child('characters/${imageFile}');
+    // final uploadTask = await ref.putFile(imageFile);
+    // return await uploadTask.ref.getDownloadURL();
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference storageRef =
+          firebaseStorage.ref().child('character_images/$fileName');
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print("Error uploading image: $e");
+      return '';
+    }
+  }
 
   // @override
   // Future<String> uploadCharacterImage(File imageFile) {
   //   // TODO: implement uploadCharacterImage
   //   throw UnimplementedError();
   // }
-
 }
