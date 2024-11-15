@@ -20,6 +20,7 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource {
     required this.auth,
     required this.firebaseStorage,
   });
+//************************** CREATE EVENT *********************************/
 
   @override
   Future<Either<Failure, EventModel>> createEvent({EventModel? event}) async {
@@ -49,30 +50,35 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource {
       return Left(ServerFailure('Failed to create event: $e'));
     }
   }
+//************************** GET ALL  EVENT *********************************/
 
   @override
-  Future<Either<Failure, List<EventModel>>> getAllEvents() async {
-    try {
-      final uidUser = auth.currentUser?.uid;
-      if (uidUser == null) {
-        return Left(OfflineFailure('User not logged in'));
-      }
+Stream<Either<Failure, List<EventModel>>> getAllEvents() async* {
+  try {
+    final uidUser = auth.currentUser?.uid;
+    if (uidUser == null) {
+      yield Left(OfflineFailure('User not logged in'));
+      return;
+    }
 
-      final querySnapshot = await firebaseFirestore
-          .collection(collectionUsersName)
-          .doc(uidUser)
-          .collection(collectionEventName)
-          .get();
+    final eventStream = firebaseFirestore
+        .collection(collectionUsersName)
+        .doc(uidUser)
+        .collection(collectionEventName)
+        .snapshots();
 
+    await for (final querySnapshot in eventStream) {
       final events = querySnapshot.docs
           .map((doc) => EventModel.fromJson(doc.data()))
           .toList();
-
-      return Right(events);
-    } catch (e) {
-      return Left(ServerFailure('Failed to retrieve events: $e'));
+      yield Right(events);
     }
+  } catch (e) {
+    yield Left(ServerFailure('Failed to retrieve events: $e'));
   }
+}
+
+//************************** DELETE EVENT *********************************/
 
   @override
   Future<Either<Failure, Unit>> deleteEvent({EventEntity? deletedEvent}) async {
@@ -103,7 +109,7 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource {
       return Left(ServerFailure('Failed to delete event: $e'));
     }
   }
-
+//************************** UPDATE EVENT *********************************/
   @override
   Future<Either<Failure, EventEntity>> updateEvent({EventModel? updatedEvent}) async {
 
@@ -135,7 +141,8 @@ class EventRemoteDatasourceImpl implements EventRemotedatasource {
        return Left(ServerFailure('Failed to update event: $e'));
      }
   }
-  
+  //************************** GETALL EVENT BY CHARACTER EVENT *********************************/
+
 @override
 Future<Either<Failure, List<EventModel>>> getAllEventsByCharacter({String? idCharacter}) async {
   try {

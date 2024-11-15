@@ -16,16 +16,24 @@ class GetallEventCubit extends Cubit<GetallEventState> {
   Future<void> getAllEvents() async {
     emit(GetallEventState.loading());
 
-    final result = await getAllEventUsecase();
-    result.fold(
-      (failure) {
-        log('Failed to retrieve events: ${failure.message}');
-        emit(GetallEventState.error(message: failure.message));
-      },
-      (events) {
-        log('Events retrieved successfully: $events');
-        emit(GetallEventState.success(events: events));
-      },
-    );
+   try {
+    // Listen to the stream from the use case
+    await for (final result in getAllEventUsecase()) {
+      result.fold(
+        (failure) {
+          log('Failed to retrieve events: ${failure.message}');
+          emit(GetallEventState.error(message: failure.message));
+        },
+        (events) {
+          log('Events retrieved successfully: $events');
+          emit(GetallEventState.success(events: events));
+        },
+      );
+    }
+  } catch (e) {
+    log('Error: $e');
+    emit(GetallEventState.error(message: 'Unexpected error: $e'));
+  }
+    
   }
 }

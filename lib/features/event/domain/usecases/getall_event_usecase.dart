@@ -9,7 +9,7 @@ class GetAllEventUsecase {
   GetAllEventUsecase({required this.eventRepository});
 
 
-   Future<Either<Failure, List<EventEntity>>> call() async {
-    return eventRepository.getAllEvents();
+   Stream<Either<Failure, List<EventEntity>>> call() async* {
+    yield* eventRepository.getAllEvents();
   }
 }

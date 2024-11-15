@@ -38,35 +38,39 @@ final EventRemoteDatasourceImpl remoteDataSource;
   ///********************* get all events  ******************/
   
 @override
-Future<Either<Failure, List<EventEntity>>> getAllEvents() async {
+Stream<Either<Failure, List<EventEntity>>> getAllEvents() async* {
   if (await networkInfo.isConnected) {
     try {
-      final eventsResult = await remoteDataSource.getAllEvents();
-      return eventsResult.fold(
-        (failure) => Left(failure), 
-        (eventsModelList) {
-          // Map each EventModel to an EventEntity
-          final eventsEntityList = eventsModelList.map((eventModel) {
-            return EventEntity(
-              id:eventModel.id ,
-              user: eventModel.user,
-              title: eventModel.title,
-              description: eventModel.description,
-              statusColor: eventModel.statusColor,
-              type: eventModel.type,
-              date: eventModel.date,
-            );
-          }).toList();
-          return Right(eventsEntityList);
-        },
-      );
+      final eventStream = remoteDataSource.getAllEvents();
+
+      await for (final eventsResult in eventStream) {
+        yield eventsResult.fold(
+          (failure) => Left(failure),
+          (eventsModelList) {
+            // Map each EventModel to an EventEntity
+            final eventsEntityList = eventsModelList.map((eventModel) {
+              return EventEntity(
+                id: eventModel.id,
+                user: eventModel.user,
+                title: eventModel.title,
+                description: eventModel.description,
+                statusColor: eventModel.statusColor,
+                type: eventModel.type,
+                date: eventModel.date,
+              );
+            }).toList();
+            return Right(eventsEntityList);
+          },
+        );
+      }
     } on ServerException {
-      return Left(ServerFailure());
+      yield Left(ServerFailure());
     }
   } else {
-    return Left(OfflineFailure());
+    yield Left(OfflineFailure());
   }
 }
+
 
 //*************************  delete event ********* */
 
