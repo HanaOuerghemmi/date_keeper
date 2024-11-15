@@ -1,3 +1,4 @@
+import 'package:date_keeper/core/function/function.dart';
 import 'package:date_keeper/features/event/domain/entities/event_entity.dart';
 import 'package:date_keeper/features/event/presentation/bloc/delete_event_cubit/delete_event_cubit.dart';
 import 'package:date_keeper/features/event/presentation/bloc/update_event_cubit/update_event_cubit.dart';
@@ -50,7 +51,8 @@ class _EventListState extends State<EventList> {
           success: (_) {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Event "${item.title}" deleted successfully')),
+              SnackBar(
+                  content: Text('Event "${item.title}" deleted successfully')),
             );
           },
           error: (errorState) {
@@ -86,7 +88,9 @@ class _EventListState extends State<EventList> {
           success: (_) {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Event "${updatedEvent}" updated successfully')),
+              SnackBar(
+                  content:
+                      Text('Event "${updatedEvent}" updated successfully')),
             );
           },
           error: (errorState) {
@@ -105,34 +109,45 @@ class _EventListState extends State<EventList> {
   @override
   Widget build(BuildContext context) {
     final events = widget.listEvents;
-
+    final filteredEvents = events
+        .where((event) =>
+            calculateDateDifference(dateToCalculate: event.date) >= 0)
+        .toList()
+      ..sort((eventA, eventB) {
+        final eventDateA = DateTime.parse(eventA.date!); // eventA's date
+        final eventDateB = DateTime.parse(eventB.date!); // eventB's date
+        // Sort by event date (ascending order)
+        return eventDateA.compareTo(eventDateB);
+      });
     if (events.isEmpty) {
       return const Center(child: Text('No events yet'));
     }
-
     return ListView.builder(
       padding: const EdgeInsets.all(8.0),
-      itemCount: events.length,
+      itemCount: filteredEvents.length,
       itemBuilder: (context, index) {
-        final item = events[index];
+        final event = filteredEvents[index];
+        final dateRest = calculateDateDifference(dateToCalculate: event.date);
         return Dismissible(
-          key: Key(item.id!),
+          key: Key(event.id!),
           background: swipeRightAction(),
           secondaryBackground: swipeLeftAction(),
           confirmDismiss: (direction) async {
             if (direction == DismissDirection.endToStart) {
-              return await _confirmDelete(item);
+              return await _confirmDelete(event);
             } else if (direction == DismissDirection.startToEnd) {
-              return await _confirmUpdate(item, index);
+              return await _confirmUpdate(event, index);
             }
             return false;
           },
           onDismissed: (direction) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("${item.title} ${direction == DismissDirection.endToStart ? 'deleted' : 'updated'}")),
+              SnackBar(
+                  content: Text(
+                      "${event.title} ${direction == DismissDirection.endToStart ? 'deleted' : 'updated'}")),
             );
           },
-          child: EventCard(event: item),
+          child: EventCard(event: event, dateRest: dateRest),
         );
       },
     );
