@@ -48,3 +48,11 @@ Future<void> checkAppFlow({
     navigateGoOption(context: context, routeName: homeScreen);
   }
 }
+//****************************** calculate date left  **************/
+int calculateDateDifference({String? dateToCalculate}) {
+  // Parse the input date string into a DateTime object
+  final date = DateTime.parse(dateToCalculate!);
+  final now = DateTime.now();
+  final difference = date.difference(now).inDays;
+  return difference;
+}

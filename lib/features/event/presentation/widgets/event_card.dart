@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class EventCard extends StatefulWidget {
   final EventEntity event;
-
-  const EventCard({super.key, required this.event});
+final int dateRest;
+  const EventCard({super.key, required this.event, required this.dateRest});
 
   @override
   State<EventCard> createState() => _EventCardState();
@@ -81,9 +81,9 @@ class _EventCardState extends State<EventCard> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  '12 days', // Event duration, hardcoded for now
-                  style: TextStyle(color: Colors.black),
+                 Text(
+                  '${widget.dateRest} days left', // Event duration, hardcoded for now
+                  style: TextStyle(color: Colors.red),
                 ),
               ],
             ),
