@@ -20,9 +20,9 @@ void showAddEventModal(BuildContext context, Function fetchEvents, List<Characte
 
   void submitEvent(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-     
+    
       final EventEntity event = EventEntity(
-        user: selectedUser!.copyWith(id: selectedUser!.id),
+        user: selectedUser,
         title: _titleController.text,
         description: _descriptionController.text,
         statusColor: selectedColor.text,
