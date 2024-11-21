@@ -1,18 +1,13 @@
 import 'dart:developer';
-
-import 'package:date_keeper/core/rooting/app_rooting.dart';
+import 'dart:ui';
 import 'package:date_keeper/core/utils/colors.dart';
 import 'package:date_keeper/features/character/data/models/character_model.dart';
-import 'package:date_keeper/features/character/presentation/cubit/get_all_character/get_all_character_cubit.dart';
-import 'package:date_keeper/features/character/presentation/pages/create_character_page.dart';
-import 'package:date_keeper/features/character/presentation/widgets/widget_character.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectUserWidget extends StatefulWidget {
-  //
   final List<CharacterModel> users;
   final Function(CharacterModel?) onUserSelected;
+
   const SelectUserWidget({
     Key? key,
     required this.users,
@@ -26,97 +21,101 @@ class SelectUserWidget extends StatefulWidget {
 class _SelectUserWidgetState extends State<SelectUserWidget> {
   CharacterModel? _selectedUser;
 
-  @override
-  Widget build(BuildContext context) {
-    log('widget characters');
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: SizedBox(
-              height: 150,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.users.length,
-                itemBuilder: (context, index) {
-                  final character = widget.users[index];
+  void _toggleSelection(CharacterModel character) {
+    setState(() {
+      _selectedUser = _selectedUser == character ? null : character;
+      widget.onUserSelected(_selectedUser);
+      log(_selectedUser == null
+          ? 'No user selected'
+          : 'Selected user: ${_selectedUser?.name}');
+    });
+  }
 
-                  return GestureDetector(
-                    //! refactor code make just one widget with all thing .....
-                    onTap: () {
-                      setState(() {
-                        if (_selectedUser == null ||
-                            _selectedUser != character) {
-                          _selectedUser = character;
-                          widget.onUserSelected(character);
-                          if (character != null) {
-                            log('Selected user: ${character.name}');
-                          } else {
-                            _selectedUser = null;
-                            log('No user selected');
-                          }
-                        } else if (_selectedUser == character) {
-                          _selectedUser = null;
-                          widget.onUserSelected(null);
-                        }
-                      });
-                    },
-                    child: Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        CharcterItemWidget(
-                            text: character.name ?? '',
-                            image: Image.network(
-                              character.profilePicture!,
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(
-                                Icons.person,
-                                size: 50 * 0.6,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                if (_selectedUser == null ||
-                                    _selectedUser != character) {
-                                  _selectedUser = character;
-                                  widget.onUserSelected(character);
-                                  if (character != null) {
-                                    log('Selected user: ${character.name}');
-                                  } else {
-                                    _selectedUser = null;
-                                    log('No user selected');
-                                  }
-                                } else if (_selectedUser == character) {
-                                  _selectedUser = null;
-                                  widget.onUserSelected(null);
-                                }
-                              });
-                            }),
-                        if (character == _selectedUser)
-                          const Center(
-                            child: Icon(
-                              Icons.check,
-                              color: whiteColor,
-                              size: 70,
-                              fill: 1,
-                              weight: 10,
-                            ),
+  Widget _buildCharacterItem(CharacterModel character, bool isSelected) {
+    return GestureDetector(
+      onTap: () => _toggleSelection(character),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // Profile image
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage(character.profilePicture ?? ''),
+                    fit: BoxFit.cover,
+                    onError: (_, __) {},
+                  ),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: primaryColor.withOpacity(0.6),
+                            blurRadius: 20,
+                            spreadRadius: 5,
                           ),
-                      ],
-                    ),
-                  );
-                },
+                        ]
+                      : [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                ),
               ),
+              // Overlay and check icon if selected
+              if (isSelected)
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: black.withOpacity(0.4),
+                  ),
+                  child:  Icon(
+                    Icons.check_circle,
+                    color:whiteColor.withOpacity(0.6),
+                    size: 40,
+                  ),
+                ),
+            ],
+          ),
+          // User name
+          const SizedBox(height: 8),
+          Text(
+            character.name ?? '',
+            style: TextStyle(
+              color: isSelected ? lightColor : black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
-    ]);
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 150,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.users.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 15),
+        itemBuilder: (context, index) {
+          final character = widget.users[index];
+          final isSelected = _selectedUser == character;
+          return _buildCharacterItem(character, isSelected);
+        },
+      ),
+    );
   }
 }
